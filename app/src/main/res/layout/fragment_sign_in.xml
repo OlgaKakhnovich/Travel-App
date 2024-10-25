@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:text="Sign In"
         tools:layout_editor_absoluteX="166dp"
-        tools:layout_editor_absoluteY="149dp" />
+        tools:layout_editor_absoluteY="149dp"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/email_signin"
@@ -22,7 +23,8 @@
         android:hint="e-mail"
         android:inputType="textEmailAddress"
         tools:layout_editor_absoluteX="103dp"
-        tools:layout_editor_absoluteY="276dp" />
+        tools:layout_editor_absoluteY="276dp"
+        tools:ignore="MissingConstraints" />
 
 
     <EditText
@@ -33,7 +35,8 @@
         android:hint="password"
         android:inputType="textPassword"
         tools:layout_editor_absoluteX="108dp"
-        tools:layout_editor_absoluteY="333dp" />
+        tools:layout_editor_absoluteY="333dp"
+        tools:ignore="MissingConstraints" />
 
 
 
@@ -44,7 +47,8 @@
         android:text="Click"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="418dp" />
+        tools:layout_editor_absoluteY="418dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/link_signup"
@@ -52,6 +56,7 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="502dp" />
+        tools:layout_editor_absoluteY="502dp"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
