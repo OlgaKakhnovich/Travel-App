@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">Travel-Application</string>
+    <string name="twoja_mapa_do_niezapomnianych_podr__y__string">Twoja mapa do\nniezapomnianych podróży!</string>
+    <string name="maporia_string">MAPORIA</string>
+    <string name="zaloguj_si__string">Zaloguj się</string>
+    <string name="nie_masz_jeszcze_konta__zarejestruj_si__teraz__string">Nie masz jeszcze konta? Zarejestruj się teraz!</string>
+    <string name="title_activity_first_page">First_page_activity</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

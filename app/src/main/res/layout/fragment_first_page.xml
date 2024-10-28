@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_plane"
+    android:fitsSystemWindows="true"
+    tools:context=".FirstPageFragment"
+    tools:openDrawer="start">
+
+
+    <LinearLayout
+        android:id="@+id/first_page"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:id="@+id/group_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:gravity="center_vertical">
+
+
+            <RelativeLayout
+                android:id="@+id/group_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/twoja_mapa_do_niezapomnianych_podr__y_"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="75dp"
+                    android:gravity="center"
+                    android:text="@string/twoja_mapa_do_niezapomnianych_podr__y__string"
+                    android:textColor="@color/orange2"
+                    android:fontFamily="@font/la_belle_aurore"
+                    android:lineSpacingExtra="-15dp"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/maporia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center"
+                    android:gravity="center"
+                    android:fontFamily="@font/aclonica"
+                    android:text="@string/maporia_string"
+                    android:textColor="@color/orange_dark"
+                    android:textSize="65sp" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/group_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="200dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <Button
+                    android:id="@+id/loginbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal|center"
+                    android:backgroundTint="@color/orange_dark"
+                    android:gravity="center"
+                    android:text="@string/zaloguj_si__string"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/afacad"
+                    app:cornerRadius="30dp" />
+
+
+                <TextView
+                    android:id="@+id/nie_masz_jeszcze_konta__zarejestruj_si__teraz_"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33.863501548767dp"
+                    android:layout_gravity="center_horizontal|center"
+                    android:gravity="center"
+                    android:fontFamily="@font/afacad"
+                    android:text="@string/nie_masz_jeszcze_konta__zarejestruj_si__teraz__string"
+                    android:textColor="@color/orange2"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</LinearLayout>
+
