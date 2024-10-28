@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">MAPORIA</string>
     <string name="twoja_mapa_do_niezapomnianych_podr__y__string">Twoja mapa do\nniezapomnianych podróży!</string>
     <string name="maporia_string">MAPORIA</string>
     <string name="zaloguj_si__string">Zaloguj się</string>
