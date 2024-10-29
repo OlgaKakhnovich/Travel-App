@@ -15,16 +15,12 @@
     <string name="email">e-mail</string>
 
 
-
     <string name="signup_text">REJESTRACJA</string>
     <string name="signup2">Zarejestruj się</string>
     <string name="name">Imię</string>
     <string name="lastname">Nazwisko</string>
     <string name="passwconfirm">powtórz hasło</string>
     <string name="haveaccount">Mam już konto - zaloguj się</string>
-
-
-
 
 
     <!-- TODO: Remove or change this placeholder text -->
