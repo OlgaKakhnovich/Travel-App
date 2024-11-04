@@ -5,54 +5,130 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.commit
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+
+    private lateinit var nameEditText: EditText
+    private lateinit var lastnameEditText: EditText
+    private lateinit var emailEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var confirmPasswordEditText: EditText
+    private lateinit var signUpButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        val view = inflater.inflate(R.layout.fragment_sign_up, container, false)
+
+        val loginButton: TextView = view.findViewById(R.id.haveaccount_id)
+
+        loginButton.setOnClickListener {
+            parentFragmentManager.commit {
+                replace(R.id.fragment_container, SignInFragment())
+                addToBackStack(null)
+            }
+        }
+
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
+        nameEditText = view.findViewById(R.id.name_id)
+        lastnameEditText = view.findViewById(R.id.lastname_id)
+        emailEditText = view.findViewById(R.id.email_id)
+        passwordEditText = view.findViewById(R.id.passw_id)
+        confirmPasswordEditText = view.findViewById(R.id.passw)
+        signUpButton = view.findViewById(R.id.signupbutton_id)
+
+        signUpButton.setOnClickListener {
+            performSignUp()
+        }
+
+
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun performSignUp() {
+        val name = nameEditText.text.toString().trim()
+        val lastname = lastnameEditText.text.toString().trim()
+        val email = emailEditText.text.toString().trim()
+        val password = passwordEditText.text.toString().trim()
+        val confirmPassword = confirmPasswordEditText.text.toString().trim()
+
+        if (name.isEmpty() || lastname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(requireContext(), "Wszystkie pola są wymagane", Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        if (password != confirmPassword) {
+            Toast.makeText(requireContext(), "Hasła nie pasują", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        firestore.collection("user")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Konto z tym adresem e-mail już istnieje.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val userId = auth.currentUser?.uid
+                                val userData = hashMapOf(
+                                    "name" to name,
+                                    "lastname" to lastname,
+                                    "email" to email
+                                )
+
+                                if (userId != null) {
+                                    firestore.collection("user").document(userId)
+                                        .set(userData)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Rejestracja zakończona pomyślnie",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            //dodać kod do przejścia do innego fragmentu po rejestracji
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Błąd zapisu. Spróbuj ponownie.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Rejestracja nie powiodła się. Spróbuj ponownie.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                 }
             }
     }
