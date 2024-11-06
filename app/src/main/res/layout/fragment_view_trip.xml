@@ -34,8 +34,8 @@
     <LinearLayout
         android:id="@+id/detailsContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="450dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/gradient"
         android:orientation="vertical"
         android:padding="30dp"
