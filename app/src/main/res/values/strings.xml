@@ -23,12 +23,19 @@
     <string name="haveaccount">Mam już konto - zaloguj się</string>
 
 
-
-
     <string name="myopinion">Moje wrażenia:</string>
     <string name="tips">Wskazówki:</string>
 
 
+
+    <string name="add_photos">Dodaj zdjęcia</string>
+    <string name="add_city">Miasto podróży</string>
+    <string name="add_country">Kraj podróży</string>
+    <string name="add_opinion">Opisz swoje wrażenia z podróży</string>
+    <string name="date_from">od</string>
+    <string name="date_to">do</string>
+    <string name="date_of_trip">Termin podróży:</string>
+    <string name="add_tips">Dodaj wskazówki, np. "Nie parkuj przy ul.Banacha 22"</string>
 
 
 

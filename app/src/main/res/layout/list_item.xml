@@ -137,7 +137,7 @@
                 android:fontFamily="@font/afacad"
                 android:layout_height="wrap_content"
                 android:paddingLeft="3dp"
-                android:hint="4.5"
+                android:hint="4"
                 android:textColor="@color/purple_dark"
                 android:textSize="17sp"
                 />
