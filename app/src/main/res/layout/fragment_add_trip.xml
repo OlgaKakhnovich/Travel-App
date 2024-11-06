@@ -108,7 +108,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                <EditText
+                <Button
                     android:id="@+id/add_date_from"
                     android:layout_width="100dp"
                     android:layout_height="35dp"
@@ -116,11 +116,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/bg_circle"
                     android:hint="@string/date_from"
-                    android:backgroundTint="@color/white"
                     android:paddingLeft="15dp"
+                    android:textColorHint="@color/white"
                     android:paddingRight="15dp"
                     android:fontFamily="@font/afacad"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
 
                 <TextView
@@ -135,19 +135,19 @@
                     android:textSize="17sp"
                     />
 
-                <EditText
+                <Button
                     android:id="@+id/add_date_to"
                     android:layout_width="100dp"
                     android:layout_height="35dp"
+                    android:gravity="center"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/bg_circle"
-                    android:backgroundTint="@color/white"
-                    android:fontFamily="@font/afacad"
                     android:hint="@string/date_to"
                     android:paddingLeft="15dp"
-                    android:gravity="center"
+                    android:textColorHint="@color/white"
                     android:paddingRight="15dp"
-                    android:textColor="@color/black"
+                    android:fontFamily="@font/afacad"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
