@@ -10,17 +10,17 @@ class FirebaseRepository(private val context: Context) {
 
     fun getName(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
         if(userId!=null){
-            val userRef = db.collection(userId).document("user")
+            val userRef = db.collection("user").document(userId)
             userRef.get()
                 .addOnSuccessListener { document ->
                     if(document!=null && document.exists()){
-                        val name = document.get("name") ?: "Imię"
-                        onSuccess(name.toString())
+                        val name = document.getString("name") ?: "Imię"
+                        onSuccess(name)
                     }else{
                         onFailure(Exception("Nie znaleziono danych z imieniem użytkownika"))
                     }
                 }
-                .addOnSuccessListener {
+                .addOnFailureListener {
                     onFailure(Exception("Błąd pobierania imienia "))
                 }
         }else{
@@ -30,18 +30,42 @@ class FirebaseRepository(private val context: Context) {
 
     fun getSurname(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
         if(userId!=null){
-            val userRef = db.collection(userId).document("user")
+            val userRef = db.collection("user").document(userId)
             userRef.get()
                 .addOnSuccessListener { document ->
                     if(document!=null && document.exists()){
-                        val name = document.get("lastname") ?: "Nazwisko"
-                        onSuccess(name.toString())
+                        val name = document.getString("lastname") ?: "Nazwisko"
+                        onSuccess(name)
                     }else{
                         onFailure(Exception("Nie znaleziono danych z nazwiskom użytkownika"))
                     }
                 }
-                .addOnSuccessListener {
+                .addOnFailureListener {
                     onFailure(Exception("Błąd pobierania nazwiska "))
+                }
+        }else{
+            onFailure(Exception("Użytkownik niezalogowany"))
+        }
+    }
+
+    fun getLocation(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
+        if(userId!=null){
+            val userRef = db.collection("user").document(userId)
+            userRef.get()
+                .addOnSuccessListener { document ->
+                    if(document!=null && document.exists()){
+                        val location = document.getString("location")
+                        if(location!=null){
+                            onSuccess(location)
+                        }else{
+                            onSuccess("")
+                        }
+                    }else{
+                        onFailure(Exception("Nie znaleziono danych użytkownika"))
+                    }
+                }
+                .addOnFailureListener {
+                    onFailure(Exception("Błąd pobierania lokalizacji "))
                 }
         }else{
             onFailure(Exception("Użytkownik niezalogowany"))
@@ -50,7 +74,7 @@ class FirebaseRepository(private val context: Context) {
 
     fun getEmail(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
         if(userId!=null){
-            val userRef = db.collection(userId).document("user")
+            val userRef = db.collection("user").document(userId)
             userRef.get()
                 .addOnSuccessListener { document ->
                     if(document!=null && document.exists()){
@@ -60,7 +84,7 @@ class FirebaseRepository(private val context: Context) {
                         onFailure(Exception("Nie znaleziono danych z email użytkownika"))
                     }
                 }
-                .addOnSuccessListener {
+                .addOnFailureListener {
                     onFailure(Exception("Błąd pobierania email "))
                 }
         }else{
