@@ -27,7 +27,6 @@
     <string name="tips">Wskazówki:</string>
 
 
-
     <string name="add_photos">Dodaj zdjęcia</string>
     <string name="add_city">Miasto podróży</string>
     <string name="add_country">Kraj podróży</string>
@@ -38,8 +37,14 @@
     <string name="add_tips">Dodaj wskazówki, np. "Nie parkuj przy ul.Banacha 22"</string>
 
 
-
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="change_name">Edytuj imię</string>
+    <string name="change_surname">Edytuj nazwisko</string>
+    <string name="change_location">Edytuj lokalizację</string>
+    <string name="change_password">Zmień hasło</string>
+    <string name="save_changes">Zapisz zmiany</string>
+    <string name="change_profil">Edytuj profil</string>
+    <string name="change_img">Zmień zdjęcie</string>
+
 </resources>

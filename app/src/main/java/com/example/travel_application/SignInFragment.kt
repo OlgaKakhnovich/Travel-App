@@ -1,5 +1,6 @@
 package com.example.travel_application
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -38,6 +39,14 @@ class SignInFragment : Fragment() {
 
         loginButton.setOnClickListener {
             performLogin()
+
+            val intent = Intent(activity, MenuActivity::class.java)
+            startActivity(intent)
+            /*
+            parentFragmentManager.commit{
+                replace(R.id.fragment_container,ProfilFragment())
+                addToBackStack(null)
+            }*/
         }
 
         val signUpTextView: TextView = view.findViewById(R.id.signup)
