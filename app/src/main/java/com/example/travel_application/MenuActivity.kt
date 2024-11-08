@@ -27,10 +27,6 @@ class MenuActivity : AppCompatActivity() {
                     replaceFragment(MapFragment())
                     true
                 }
-                R.id.bottom_add->{
-                    replaceFragment(AddTripFragment())
-                    true
-                }
                 R.id.bottom_profil->{
                     replaceFragment(ProfilFragment())
                     true
