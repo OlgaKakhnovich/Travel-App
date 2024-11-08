@@ -72,6 +72,30 @@ class FirebaseRepository(private val context: Context) {
         }
     }
 
+    fun getAbout(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
+        if(userId!=null){
+            val userRef = db.collection("user").document(userId)
+            userRef.get()
+                .addOnSuccessListener { document ->
+                    if(document!=null && document.exists()){
+                        val about = document.getString("about")
+                        if(about!=null){
+                            onSuccess(about)
+                        }else{
+                            onSuccess("")
+                        }
+                    }else{
+                        onFailure(Exception("Nie znaleziono danych użytkownika"))
+                    }
+                }
+                .addOnFailureListener {
+                    onFailure(Exception("Błąd pobierania lokalizacji "))
+                }
+        }else{
+            onFailure(Exception("Użytkownik niezalogowany"))
+        }
+    }
+
     fun getEmail(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
         if(userId!=null){
             val userRef = db.collection("user").document(userId)
@@ -92,6 +116,7 @@ class FirebaseRepository(private val context: Context) {
         }
     }
 
-    //getLocation
+
+
     //getPassword
 }

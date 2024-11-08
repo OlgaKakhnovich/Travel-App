@@ -63,6 +63,13 @@ class EditProfilFragment : Fragment() {
             onFailure = {binding.location.setText("Edytuj lokalizacje")}
         )
 
+        firebaseRepository.getAbout(
+            onSuccess = { about ->
+                binding.about.setText(about)
+            },
+            onFailure = {binding.about.setText("O mnie")}
+        )
+
 
         //zdjecie, haslo
 
@@ -70,7 +77,8 @@ class EditProfilFragment : Fragment() {
             val name = binding.name.text.toString().trim()
             val lastname = binding.surname.text.toString().trim()
             val location = binding.location.text.toString().trim()
-            updateUser(name, lastname, location.ifEmpty { null })
+            val about = binding.about.text.toString().trim()
+            updateUser(name, lastname, location.ifEmpty { null }, about.ifEmpty { null })
 
             val intent = Intent(activity, MenuActivity::class.java)
             startActivity(intent)
@@ -80,7 +88,7 @@ class EditProfilFragment : Fragment() {
     }
 
 
-    private fun updateUser(name: String, lastname: String, location: String?){
+    private fun updateUser(name: String, lastname: String, location: String?, about: String?){
         if(name.isNotEmpty() && lastname.isNotEmpty()){
 /*
             if(imageUri!=null){
@@ -95,6 +103,7 @@ class EditProfilFragment : Fragment() {
             userRef.get().addOnSuccessListener { document ->
                 if(document.exists()){
                     val locationExists = document.contains("location")
+                    val aboutExists = document.contains("about")
 
                     if(!location.isNullOrEmpty()){
                         if(locationExists){
@@ -103,6 +112,18 @@ class EditProfilFragment : Fragment() {
                                 .addOnFailureListener { e->Log.w(TAG, "Zmiany nie zostały zapisane ", e) }
                         }else{
                             userRef.set(mapOf("location" to location), SetOptions.merge())
+                                .addOnSuccessListener { Log.d(TAG, "Zmiany zostały zapisane") }
+                                .addOnFailureListener { e->Log.w(TAG, "Zmiany nie zostały zapisane ", e) }
+                        }
+                    }
+
+                    if(!about.isNullOrEmpty()){
+                        if(aboutExists){
+                            userRef.update( "about", about)
+                                .addOnSuccessListener { Log.d(TAG, "Zmiany zostały zapisane") }
+                                .addOnFailureListener { e->Log.w(TAG, "Zmiany nie zostały zapisane ", e) }
+                        }else{
+                            userRef.set(mapOf("about" to about), SetOptions.merge())
                                 .addOnSuccessListener { Log.d(TAG, "Zmiany zostały zapisane") }
                                 .addOnFailureListener { e->Log.w(TAG, "Zmiany nie zostały zapisane ", e) }
                         }

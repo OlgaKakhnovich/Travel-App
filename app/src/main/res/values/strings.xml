@@ -46,5 +46,11 @@
     <string name="save_changes">Zapisz zmiany</string>
     <string name="change_profil">Edytuj profil</string>
     <string name="change_img">Zmień zdjęcie</string>
+    <string name="about">O mnie</string>
+
+    <string name="count_country">Odwiedzono krajów:</string>
+    <string name="count_city">Odwiedzono miast:</string>
+    <string name="count_favorite_city">Uliubionych mast:</string>
+
 
 </resources>
