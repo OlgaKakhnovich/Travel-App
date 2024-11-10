@@ -27,7 +27,7 @@ class MenuActivity : AppCompatActivity() {
                     replaceFragment(MapFragment())
                     true
                 }
-                R.id.bottom_profil->{
+                R.id.bottom_profile->{
                     replaceFragment(ProfilFragment())
                     true
                 }

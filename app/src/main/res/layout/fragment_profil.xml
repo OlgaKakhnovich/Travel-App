@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginVertical="12dp"
         android:gravity="center_horizontal">
 
         <ImageView
@@ -32,22 +33,73 @@
             android:visibility="visible" />
 
         <TextView
-            android:id="@+id/img_text"
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="User name"
+            android:textSize="18dp"
+            android:textColor="@color/purple_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/userCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="User name"
+            android:text="User city"
+            android:textSize="15dp"
             android:textColor="@color/purple_dark"
             android:textStyle="italic" />
 
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/procent_world"
+            android:fontFamily="@font/afacad"
+            android:textSize="18dp"
+            android:textColor="@color/purple_dark"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/procent_world"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/afacad"
+            android:layout_marginHorizontal="5dp"
+            android:text="00"
+            android:textColor="@color/purple_dark"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/afacad"
+            android:textColor="@color/purple_dark"
+            android:text="%"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            />
     </LinearLayout>
 
     <!--horizontal-->
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:padding="12dp"
-       android:layout_marginTop="24dp"
+      android:layout_marginTop="12dp"
        android:gravity="center_horizontal"
        >
        <!--vertical-->
@@ -126,7 +178,7 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:fontFamily="@font/afacad"
-               android:text="@string/count_favorite_city"
+               android:text="@string/count_places"
                android:textColor="@color/purple_dark"
                android:textSize="10dp"
                android:gravity="center"
@@ -151,30 +203,83 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="12dp"
         android:orientation="vertical"
+        android:background="@drawable/przycisk"
+        android:backgroundTint="@color/white"
         android:padding="12dp">
         <!-- Pole O Mnie -->
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/afacad"
-            android:text="@string/about"
-            android:textColor="@color/black"
+            android:text="@string/about_"
+            android:textColor="@color/purple_dark"
             android:textSize="18sp"
             android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/star_id_view"
+                android:id="@+id/about"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/afacad"
                 android:hint="Nie jestem leniwy, po prostu działam w trybie oszczędzania energii."
-                android:textColor="@color/black"
+                android:textColor="@color/purple_dark"
                 android:textSize="17sp" />
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/mini_map"
+        android:layout_width="match_parent"
+        android:layout_height="168dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/przycisk"
+        android:backgroundTint="@color/white"
+        android:orientation="vertical"
+        android:padding="12dp">
+        <!-- Pole Mapa -->
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+
+        android:padding="12dp">
+        <!-- Pole Przyciscki -->
+
+        <Button
+            android:id="@+id/add_place"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="12dp"
+            android:textColor="@color/purple_dark"
+            android:text="@string/add_place"
+            android:fontFamily="@font/afacad"
+            android:backgroundTint="@color/orange3"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/add_wish"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="12dp"
+            android:backgroundTint="@color/orange3"
+            android:text="@string/add_wish"
+            android:fontFamily="@font/afacad"
+            android:textColor="@color/purple_dark"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
 </LinearLayout>
 
 

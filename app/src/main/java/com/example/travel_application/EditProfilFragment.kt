@@ -71,14 +71,23 @@ class EditProfilFragment : Fragment() {
         )
 
 
+        firebaseRepository.getUserName(
+            onSuccess = { userName ->
+                binding.username.setText(userName)
+            },
+            onFailure = {binding.about.setText("Imię użytkownika")}
+        )
+
+
         //zdjecie, haslo
 
         binding.confirmButton.setOnClickListener{
             val name = binding.name.text.toString().trim()
             val lastname = binding.surname.text.toString().trim()
+            val username = binding.username.text.toString().trim()
             val location = binding.location.text.toString().trim()
             val about = binding.about.text.toString().trim()
-            updateUser(name, lastname, location.ifEmpty { null }, about.ifEmpty { null })
+            updateUser(name, lastname, username, location.ifEmpty { "" }, about.ifEmpty { "" })
 
             val intent = Intent(activity, MenuActivity::class.java)
             startActivity(intent)
@@ -88,7 +97,7 @@ class EditProfilFragment : Fragment() {
     }
 
 
-    private fun updateUser(name: String, lastname: String, location: String?, about: String?){
+    private fun updateUser(name: String, lastname: String,username: String,  location: String?, about: String?){
         if(name.isNotEmpty() && lastname.isNotEmpty()){
 /*
             if(imageUri!=null){
@@ -98,6 +107,7 @@ class EditProfilFragment : Fragment() {
             val userData = mutableMapOf<String, Any>(
                 "name" to name,
                 "lastname" to lastname,
+                "username" to username,
             )
             val userRef = db.collection("user").document(userId)
             userRef.get().addOnSuccessListener { document ->
@@ -105,7 +115,7 @@ class EditProfilFragment : Fragment() {
                     val locationExists = document.contains("location")
                     val aboutExists = document.contains("about")
 
-                    if(!location.isNullOrEmpty()){
+                    if(location!=null){
                         if(locationExists){
                             userRef.update( "location", location)
                                 .addOnSuccessListener { Log.d(TAG, "Zmiany zostały zapisane") }
@@ -117,7 +127,7 @@ class EditProfilFragment : Fragment() {
                         }
                     }
 
-                    if(!about.isNullOrEmpty()){
+                    if(about!=null){
                         if(aboutExists){
                             userRef.update( "about", about)
                                 .addOnSuccessListener { Log.d(TAG, "Zmiany zostały zapisane") }

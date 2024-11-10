@@ -2,28 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item
     android:id="@+id/bottom_news"
-    android:title="Home"
+    android:title="@string/main_page"
     android:icon="@drawable/news_icon"
     />
 
     <item
         android:id="@+id/bottom_map"
-        android:title="Map"
+        android:title="@string/maps"
         android:icon="@drawable/add_location_icon"
         />
     <item
-        android:id="@+id/bottom_add"
-        android:title="Add"
-        android:icon="@drawable/add_icon"
-        />
-    <item
-        android:id="@+id/bottom_profil"
-        android:title="Profil"
+        android:id="@+id/bottom_profile"
+        android:title="@string/profile"
         android:icon="@drawable/profil_icon"
         />
     <item
+        android:id="@+id/bottom_wish"
+        android:title="@string/wish_list"
+        android:icon="@drawable/plane_icon"
+        />
+    <item
         android:id="@+id/bottom_settings"
-        android:title="Settings"
+        android:title="@string/settings"
         android:icon="@drawable/setting_icon"
         />
 </menu>

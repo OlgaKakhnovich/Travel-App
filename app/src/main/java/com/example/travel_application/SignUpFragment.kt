@@ -1,5 +1,6 @@
 package com.example.travel_application
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -24,10 +25,12 @@ class SignUpFragment : Fragment() {
     private lateinit var nameEditText: EditText
     private lateinit var lastnameEditText: EditText
     private lateinit var emailEditText: EditText
+    private lateinit var userNameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var confirmPasswordEditText: EditText
     private lateinit var signUpButton: Button
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +51,7 @@ class SignUpFragment : Fragment() {
 
         nameEditText = view.findViewById(R.id.name_id)
         lastnameEditText = view.findViewById(R.id.lastname_id)
+        userNameEditText = view.findViewById(R.id.username_id)
         emailEditText = view.findViewById(R.id.email_id)
         passwordEditText = view.findViewById(R.id.passw_id)
         confirmPasswordEditText = view.findViewById(R.id.passw)
@@ -74,11 +78,12 @@ class SignUpFragment : Fragment() {
     private fun performSignUp() {
         val name = nameEditText.text.toString().trim()
         val lastname = lastnameEditText.text.toString().trim()
+        val username = userNameEditText.text.toString().trim()
         val email = emailEditText.text.toString().trim()
         val password = passwordEditText.text.toString().trim()
         val confirmPassword = confirmPasswordEditText.text.toString().trim()
 
-        if (name.isEmpty() || lastname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        if (name.isEmpty() || lastname.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || username.isEmpty()) {
             Toast.makeText(requireContext(), "Wszystkie pola są wymagane", Toast.LENGTH_SHORT)
                 .show()
             return
@@ -109,6 +114,7 @@ class SignUpFragment : Fragment() {
                                 val userData = hashMapOf(
                                     "name" to name,
                                     "lastname" to lastname,
+                                    "username" to username,
                                     "email" to email
                                 )
 

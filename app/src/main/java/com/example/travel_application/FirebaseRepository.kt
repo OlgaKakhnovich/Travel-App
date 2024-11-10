@@ -48,6 +48,26 @@ class FirebaseRepository(private val context: Context) {
         }
     }
 
+    fun getUserName(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
+        if(userId!=null){
+            val userRef = db.collection("user").document(userId)
+            userRef.get()
+                .addOnSuccessListener { document ->
+                    if(document!=null && document.exists()){
+                        val userName = document.getString("username") ?: "Imię użytkownika"
+                        onSuccess(userName)
+                    }else{
+                        onFailure(Exception("Nie znaleziono danych z imieniem użytkownika"))
+                    }
+                }
+                .addOnFailureListener {
+                    onFailure(Exception("Błąd pobierania imienia "))
+                }
+        }else{
+            onFailure(Exception("Użytkownik niezalogowany"))
+        }
+    }
+
     fun getLocation(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
         if(userId!=null){
             val userRef = db.collection("user").document(userId)

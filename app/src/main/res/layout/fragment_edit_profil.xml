@@ -101,6 +101,22 @@
                 android:textStyle="italic"
                 android:textSize="14sp" />
 
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_circle"
+            android:hint="@string/change_username"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/afacad"
+            android:textColorHint="@color/purple_dark"
+            android:textStyle="italic"
+            android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/location"
                 android:layout_width="match_parent"
