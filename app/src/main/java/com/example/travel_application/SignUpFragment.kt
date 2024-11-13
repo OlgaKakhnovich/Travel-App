@@ -63,11 +63,6 @@ class SignUpFragment : Fragment() {
             val intent = Intent(activity, MenuActivity::class.java)
             startActivity(intent)
 
-            /*
-            parentFragmentManager.commit {
-                replace(R.id.fragment_container, EditProfilFragment())
-                addToBackStack(null)
-            }*/
         }
 
 

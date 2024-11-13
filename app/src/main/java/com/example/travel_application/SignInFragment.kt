@@ -42,11 +42,7 @@ class SignInFragment : Fragment() {
 
             val intent = Intent(activity, MenuActivity::class.java)
             startActivity(intent)
-            /*
-            parentFragmentManager.commit{
-                replace(R.id.fragment_container,ProfilFragment())
-                addToBackStack(null)
-            }*/
+
         }
 
         val signUpTextView: TextView = view.findViewById(R.id.signup)
@@ -72,7 +68,6 @@ class SignInFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(requireContext(), "Zalogowano pomyślnie", Toast.LENGTH_SHORT).show()
-                    //dodać kod do przejścia do innego fragmentu po udanym logowaniu
                 } else {
 
                     Toast.makeText(requireContext(), "Logowanie nie powiodło się. Zły login lub hasło.", Toast.LENGTH_SHORT).show()

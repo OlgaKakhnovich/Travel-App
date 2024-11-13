@@ -1,59 +1,304 @@
 package com.example.travel_application
 
+import android.Manifest
+import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
+import java.util.Calendar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddTripFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddTripFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+    private lateinit var storage: FirebaseStorage
+
+    private var headerImageUri: Uri? = null
+    private val galleryImageUris = mutableListOf<Uri>()
+    private lateinit var addHeaderImage: ImageButton
+    private lateinit var addCity: EditText
+    private lateinit var addCountry: EditText
+    private lateinit var addOpinion: EditText
+    private lateinit var addTips: EditText
+    private lateinit var buttonAddPhotos: Button
+    private lateinit var addDateFrom: Button
+    private lateinit var addDateTo: Button
+    private lateinit var buttonSaveTrip: Button
+    private lateinit var starViews: List<ImageView>
+    private var selectedRating = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_trip, container, false)
+        val view = inflater.inflate(R.layout.fragment_add_trip, container, false)
+
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        storage = FirebaseStorage.getInstance()
+
+        addHeaderImage = view.findViewById(R.id.add_headerImage)
+        addCity = view.findViewById(R.id.add_city)
+        addCountry = view.findViewById(R.id.add_country)
+        addOpinion = view.findViewById(R.id.add_opinion)
+        addTips = view.findViewById(R.id.add_tips)
+        buttonAddPhotos = view.findViewById(R.id.button_add_photos)
+        addDateFrom = view.findViewById(R.id.add_date_from)
+        addDateTo = view.findViewById(R.id.add_date_to)
+        buttonSaveTrip = view.findViewById(R.id.button_save)
+
+
+        starViews = listOf(
+            view.findViewById(R.id.star1),
+            view.findViewById(R.id.star2),
+            view.findViewById(R.id.star3),
+            view.findViewById(R.id.star4),
+            view.findViewById(R.id.star5)
+        )
+
+
+        starViews.forEachIndexed { index, imageView ->
+            imageView.setOnClickListener {
+                selectedRating = index + 1
+                updateStars(selectedRating)
+            }
+        }
+
+        addHeaderImage.setOnClickListener {
+            showHeaderImageSelectionDialog()
+        }
+
+        buttonAddPhotos.setOnClickListener {
+            showGalleryImageSelectionDialog()
+        }
+
+        addDateFrom.setOnClickListener {
+            showDatePickerDialog { date ->
+                addDateFrom.text = date
+            }
+        }
+
+        addDateTo.setOnClickListener {
+            showDatePickerDialog { date ->
+                addDateTo.text = date
+            }
+        }
+
+        buttonSaveTrip.setOnClickListener {
+            saveTripToFirestore()
+            val intent = Intent(activity, ProfilFragment::class.java)
+            startActivity(intent)
+        }
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddTripFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddTripFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun showHeaderImageSelectionDialog() {
+        val options = arrayOf("Wybierz z Galerii", "Zrób Zdjęcie")
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Dodaj Zdjęcie Nagłówka")
+        builder.setItems(options) { _, which ->
+            when (which) {
+                0 -> selectHeaderImageFromGallery()
+                1 -> takeHeaderPhoto()
+            }
+        }
+        builder.show()
+    }
+
+    private fun selectHeaderImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        selectHeaderImageLauncher.launch(intent)
+    }
+
+    private val selectHeaderImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                headerImageUri = result.data!!.data
+                addHeaderImage.setImageURI(headerImageUri)
+            }
+        }
+
+    private fun takeHeaderPhoto() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED) {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takeHeaderPhotoLauncher.launch(intent)
+        } else {
+            requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private val takeHeaderPhotoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val bitmap = result.data!!.extras?.get("data") as Bitmap
+                headerImageUri = getImageUriFromBitmap(bitmap)
+                addHeaderImage.setImageURI(headerImageUri)
+            }
+        }
+
+    private fun showGalleryImageSelectionDialog() {
+        if (galleryImageUris.size >= 10) {
+            Toast.makeText(requireContext(), "Możesz dodać maksymalnie 10 zdjęć", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val options = arrayOf("Wybierz z Galerii", "Zrób Zdjęcie")
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Dodaj Zdjęcia do Galerii")
+        builder.setItems(options) { _, which ->
+            when (which) {
+                0 -> selectMultipleImagesFromGallery()
+                1 -> takeGalleryPhoto()
+            }
+        }
+        builder.show()
+    }
+
+    private fun selectMultipleImagesFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        selectGalleryImageLauncher.launch(intent)
+    }
+
+    private val selectGalleryImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                result.data?.let { data ->
+                    if (data.clipData != null) {
+                        val count = data.clipData!!.itemCount
+                        for (i in 0 until count) {
+                            val uri = data.clipData!!.getItemAt(i).uri
+                            if (galleryImageUris.size < 10) {
+                                galleryImageUris.add(uri)
+                            } else {
+                                Toast.makeText(requireContext(), "Osiągnięto limit 10 zdjęć", Toast.LENGTH_SHORT).show()
+                                break
+                            }
+                        }
+                    } else if (data.data != null) {
+                        val uri = data.data!!
+                        if (galleryImageUris.size < 10) {
+                            galleryImageUris.add(uri)
+                        } else {
+                            Toast.makeText(requireContext(), "Osiągnięto limit 10 zdjęć", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
+                Toast.makeText(requireContext(), "Dodano zdjęcia do galerii", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun takeGalleryPhoto() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED) {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takeGalleryPhotoLauncher.launch(intent)
+        } else {
+            requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private val takeGalleryPhotoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val bitmap = result.data!!.extras?.get("data") as Bitmap
+                val uri = getImageUriFromBitmap(bitmap)
+                uri?.let {
+                    if (galleryImageUris.size < 10) {
+                        galleryImageUris.add(it)
+                        Toast.makeText(requireContext(), "Dodano zdjęcie do galerii", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Osiągnięto limit 10 zdjęć", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+    private fun getImageUriFromBitmap(bitmap: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(requireContext().contentResolver, bitmap, "TempImage", null)
+        return Uri.parse(path)
+    }
+
+    private val requestCameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                // Repeat action
+            } else {
+                Toast.makeText(requireContext(), "Wymagana zgoda na użycie kamery", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun showDatePickerDialog(callback: (String) -> Unit) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+            callback(date)
+        }, year, month, day)
+
+        datePickerDialog.show()
+    }
+
+    private fun updateStars(rating: Int) {
+        starViews.forEachIndexed { index, imageView ->
+            if (index < rating) {
+                imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.orange_dark))
+            } else {
+                imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.grey))
+            }
+        }
+    }
+
+    private fun saveTripToFirestore() {
+        val city = addCity.text.toString()
+        val country = addCountry.text.toString()
+        val opinion = addOpinion.text.toString()
+        val tips = addTips.text.toString()
+        val dateFrom = addDateFrom.text.toString()
+        val dateTo = addDateTo.text.toString()
+        val userId = auth.currentUser?.uid ?: ""
+
+        val tripData = hashMapOf(
+            "city" to city,
+            "country" to country,
+            "opinion" to opinion,
+            "tips" to tips,
+            "dateFrom" to dateFrom,
+            "dateTo" to dateTo,
+            "rating" to selectedRating,
+            "userId" to userId
+        )
+
+        db.collection("places").add(tripData)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Wyjazd zapisany", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(requireContext(), "Błąd: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 }

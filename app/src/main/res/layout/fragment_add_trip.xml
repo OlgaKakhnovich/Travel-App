@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_trip_fragm"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewTripFragment">
+
+
 
     <!-- Tło obrazka -->
     <ImageButton
@@ -212,20 +215,20 @@
             </LinearLayout>
         </LinearLayout>
 
+
         <EditText
             android:id="@+id/add_opinion"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:fontFamily="@font/afacad"
-            android:padding="15dp"
-            android:gravity="start|top"
-        android:inputType="textMultiLine"
-            android:hint="@string/add_opinion"
-            android:backgroundTint="@color/white"
             android:background="@drawable/przycisk"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/afacad"
+            android:gravity="start|top"
+            android:hint="@string/add_opinion"
+            android:inputType="textMultiLine"
+            android:padding="15dp"
             android:textColor="@color/black"
             android:textSize="14sp" />
-
 
         <TextView
             android:layout_width="match_parent"
@@ -238,6 +241,7 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/add_tips"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:fontFamily="@font/afacad"
@@ -251,4 +255,24 @@
             android:textSize="14sp" />
 
     </LinearLayout>
+
+
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:fontFamily="@font/afacad"
+        android:text="Zapisz"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_detailsContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
