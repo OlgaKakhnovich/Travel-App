@@ -59,14 +59,14 @@ class ProfilFragment : Fragment() {
             onFailure = {binding.userCity.text = ""}
         )
 
-/*  z dolnym menu
-        addTrip = binding.addPlace
-        addTrip.setOnClickListener {
-            parentFragmentManager.commit {
-                replace(R.id.frame_container, AddTripFragment())
-                addToBackStack(null)
-            }
-        }*/
+        /*  z dolnym menu
+                addTrip = binding.addPlace
+                addTrip.setOnClickListener {
+                    parentFragmentManager.commit {
+                        replace(R.id.frame_container, AddTripFragment())
+                        addToBackStack(null)
+                    }
+                }*/
 
 
         //bez menu

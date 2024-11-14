@@ -60,4 +60,8 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.8.4")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(platform("com.google.firebase:firebase-bom:33.5.0"))
+
+    implementation ("com.google.firebase:firebase-firestore:24.5.0")
+    implementation ("com.firebaseui:firebase-ui-firestore:8.0.0")
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
 }

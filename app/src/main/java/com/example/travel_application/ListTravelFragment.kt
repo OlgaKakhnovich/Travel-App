@@ -1,59 +1,60 @@
 package com.example.travel_application
 
+import Trip
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import TripAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+//import kotlinx.android.synthetic.main.fragment_list_travel.view.* // Importuj odpowiednie widoki
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ListTravelFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ListTravelFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: TripAdapter
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_travel, container, false)
+        val view = inflater.inflate(R.layout.fragment_list_travel, container, false)
+
+        db = FirebaseFirestore.getInstance()
+
+        // Inicjalizacja RecyclerView
+        recyclerView = view.findViewById(R.id.list_travel)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Przygotowanie zapytania do Firestore
+        val query = db.collection("places") // Kolekcja, którą będziesz miał w Firebase
+
+        // Konfiguracja adaptera
+        val options = FirestoreRecyclerOptions.Builder<Trip>()
+            .setQuery(query, Trip::class.java)
+            .build()
+
+        adapter = TripAdapter(options)
+
+        // Ustawienie adaptera dla RecyclerView
+        recyclerView.adapter = adapter
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListTravelFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListTravelFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
     }
 }
