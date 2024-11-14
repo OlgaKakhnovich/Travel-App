@@ -292,7 +292,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="12dp"
             android:textColor="@color/purple_dark"
-            android:text="Moje podróża"
+            android:text="@string/my_trip"
             android:fontFamily="@font/afacad"
             android:backgroundTint="@color/orange3"
             android:textSize="14sp"

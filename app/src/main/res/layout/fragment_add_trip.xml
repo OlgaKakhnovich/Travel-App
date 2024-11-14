@@ -13,7 +13,7 @@
     <ImageButton
         android:id="@+id/add_headerImage"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="180dp"
         android:backgroundTint="@color/orange1"
         android:src="@drawable/add"
         android:scaleType="centerInside"
@@ -34,7 +34,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/gradient"
         android:orientation="vertical"
-        android:padding="30dp"
+        android:padding="20dp"
         app:layout_constraintTop_toBottomOf="@id/add_headerImage">
 
 
@@ -162,7 +162,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp">
+            android:layout_marginTop="20dp">
             <!-- Pole Moje Wrażenia -->
             <TextView
                 android:layout_width="match_parent"
@@ -219,7 +219,7 @@
         <EditText
             android:id="@+id/add_opinion"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="110dp"
             android:background="@drawable/przycisk"
             android:backgroundTint="@color/white"
             android:fontFamily="@font/afacad"
@@ -243,7 +243,7 @@
         <EditText
             android:id="@+id/add_tips"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:fontFamily="@font/afacad"
             android:padding="15dp"
             android:gravity="start|top"
@@ -254,24 +254,23 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
+
+
+        <Button
+        android:id="@+id/button_save"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/afacad"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+        android:textSize="14sp" />
+
+
     </LinearLayout>
 
 
-    <Button
-        android:id="@+id/button_save"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center_vertical"
-        android:fontFamily="@font/afacad"
-        android:text="Zapisz"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_detailsContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 
 

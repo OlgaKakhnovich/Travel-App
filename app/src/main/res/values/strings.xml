@@ -18,7 +18,7 @@
     <string name="signup_text">REJESTRACJA</string>
     <string name="signup2">Zarejestruj się</string>
     <string name="name">Imię</string>
-    <string name="username">Imię użytkownika</string>
+    <string name="username">nazwa użytkownika</string>
     <string name="lastname">Nazwisko</string>
     <string name="passwconfirm">powtórz hasło</string>
     <string name="haveaccount">Mam już konto - zaloguj się</string>
@@ -42,7 +42,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="change_name">Edytuj imię</string>
     <string name="change_surname">Edytuj nazwisko</string>
-    <string name="change_username">Edytuj imię użytkownika</string>
+    <string name="change_username">Edytuj nazwę użytkownika</string>
     <string name="change_location">Edytuj lokalizację</string>
     <string name="change_password">Zmień hasło</string>
     <string name="save_changes">Zapisz zmiany</string>
@@ -57,7 +57,7 @@
     <string name="procent_world">Poznany Świat: </string>
 
     <string name="add_place">Dodaj miejsce</string>
-    <string name="add_wish">Dodaj żeczenie </string>
+    <string name="add_wish">Dodaj życzenie </string>
     <string name="main_page">Strona główna</string>
     <string name="maps">Mapy</string>
     <string name="profile">Profil</string>
@@ -66,6 +66,11 @@
     <string name="enter_country">Wprowadź kraj</string>
     <string name="enter_city">Wprowadź miasto</string>
     <string name="add">Dodać</string>
+    <string name="my_trip">Moje podróże</string>
+
+
+
+    <string name="ok">Zapisz</string>
 
 
 </resources>
