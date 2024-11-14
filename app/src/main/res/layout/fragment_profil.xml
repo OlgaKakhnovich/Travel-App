@@ -235,7 +235,7 @@
     <LinearLayout
         android:id="@+id/mini_map"
         android:layout_width="match_parent"
-        android:layout_height="168dp"
+        android:layout_height="160dp"
         android:layout_marginTop="18dp"
         android:background="@drawable/przycisk"
         android:backgroundTint="@color/white"
@@ -247,24 +247,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-
-        android:padding="12dp">
+        android:padding="5dp">
         <!-- Pole Przyciscki -->
 
         <Button
             android:id="@+id/add_place"
             android:layout_width="140dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
-            android:textColor="@color/purple_dark"
-            android:text="@string/add_place"
-            android:fontFamily="@font/afacad"
             android:backgroundTint="@color/orange3"
+            android:fontFamily="@font/afacad"
+            android:text="@string/add_place"
+            android:textColor="@color/purple_dark"
             android:textSize="14sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/add_wish"
@@ -279,7 +278,27 @@
             android:textStyle="bold"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        >
+        <!-- Pole Przyciscki -->
 
+        <Button
+            android:id="@+id/tripList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="12dp"
+            android:textColor="@color/purple_dark"
+            android:text="Moje podróża"
+            android:fontFamily="@font/afacad"
+            android:backgroundTint="@color/orange3"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+</LinearLayout>
 </LinearLayout>
 
 

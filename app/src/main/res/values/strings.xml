@@ -63,6 +63,9 @@
     <string name="profile">Profil</string>
     <string name="wish_list">Moje życzenia</string>
     <string name="settings">Ustawienia</string>
+    <string name="enter_country">Wprowadź kraj</string>
+    <string name="enter_city">Wprowadź miasto</string>
+    <string name="add">Dodać</string>
 
 
 </resources>
