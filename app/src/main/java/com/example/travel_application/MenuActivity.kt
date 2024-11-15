@@ -31,6 +31,11 @@ class MenuActivity : AppCompatActivity() {
                     replaceFragment(ProfilFragment())
                     true
                 }
+
+                R.id.bottom_wish->{
+                    replaceFragment(WishListFragment())
+                    true
+                }
                 R.id.bottom_settings->{
                     replaceFragment(EditProfilFragment())
                     true

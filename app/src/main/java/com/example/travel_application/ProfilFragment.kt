@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.commit
 import com.example.travel_application.databinding.FragmentProfilBinding
 import com.google.firebase.Firebase
@@ -27,6 +28,7 @@ class ProfilFragment : Fragment() {
     private lateinit var firebaseRepository: FirebaseRepository
     private lateinit var myTrips: Button
     private lateinit var addTrip: Button
+    private lateinit var addWish: Button
 
 
     @SuppressLint("MissingInflatedId")
@@ -59,14 +61,14 @@ class ProfilFragment : Fragment() {
             onFailure = {binding.userCity.text = ""}
         )
 
-        /*  z dolnym menu
-                addTrip = binding.addPlace
-                addTrip.setOnClickListener {
-                    parentFragmentManager.commit {
-                        replace(R.id.frame_container, AddTripFragment())
-                        addToBackStack(null)
-                    }
-                }*/
+/*  z dolnym menu
+        addTrip = binding.addPlace
+        addTrip.setOnClickListener {
+            parentFragmentManager.commit {
+                replace(R.id.frame_container, AddTripFragment())
+                addToBackStack(null)
+            }
+        }*/
 
 
         //bez menu
@@ -91,13 +93,68 @@ class ProfilFragment : Fragment() {
             }
         }
 
+        addWish = binding.addWish
+        addWish.setOnClickListener {
+            showAddWishDialog()
+        }
+
         return binding.root
+    }
+
+    @SuppressLint("MissingInflatedId")
+    private fun showAddWishDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.fragment_add_wish, null)
+
+        val enterCountry = dialogView.findViewById<EditText>(R.id.enterCountryWish)
+        val enterCity = dialogView.findViewById<EditText>(R.id.enterCityWish)
+        val acceptBtn = dialogView.findViewById<Button>(R.id.acceptBtn)
+        val cancelBtn = dialogView.findViewById<TextView>(R.id.cancelBtn)
+
+
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setView(dialogView)
+        val alertDialog = dialogBuilder.create()
+
+        acceptBtn.setOnClickListener {
+            val country = enterCountry.text.toString()
+            val city = enterCity.text.toString()
+
+            if(country.isNotEmpty() && city.isNotEmpty()){
+                saveDataToBase(country,city)
+                alertDialog.dismiss()
+            }else{
+                Toast.makeText(requireContext(), "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        cancelBtn.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+       alertDialog.show()
+    }
+
+    private fun saveDataToBase(country: String, city: String) {
+        val wishRef = db.collection("user").document(userId).collection("wish")
+        val wishMap = hashMapOf(
+            "country" to country,
+            "city" to city
+        )
+
+        wishRef.document().set(wishMap).addOnFailureListener {
+            Toast.makeText(
+                requireContext(),
+                "Twoje życzenie zostało dodano",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
+
     }
 
 
     override fun onResume() {
         super.onResume()
-        // Отображаем нижнее меню при возвращении на этот фрагмент
         val bottomNavigationView = requireActivity().findViewById<View>(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.VISIBLE
     }
