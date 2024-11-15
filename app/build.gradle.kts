@@ -64,4 +64,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore:24.5.0")
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
+
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
 }

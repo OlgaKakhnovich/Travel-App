@@ -12,7 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import TripAdapter
 
-//import kotlinx.android.synthetic.main.fragment_list_travel.view.* // Importuj odpowiednie widoki
 
 class ListTravelFragment : Fragment() {
 
@@ -28,21 +27,21 @@ class ListTravelFragment : Fragment() {
 
         db = FirebaseFirestore.getInstance()
 
-        // Inicjalizacja RecyclerView
+
         recyclerView = view.findViewById(R.id.list_travel)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Przygotowanie zapytania do Firestore
-        val query = db.collection("places") // Kolekcja, którą będziesz miał w Firebase
 
-        // Konfiguracja adaptera
+        val query = db.collection("places")
+
+
         val options = FirestoreRecyclerOptions.Builder<Trip>()
             .setQuery(query, Trip::class.java)
             .build()
 
         adapter = TripAdapter(options)
 
-        // Ustawienie adaptera dla RecyclerView
+
         recyclerView.adapter = adapter
 
         return view

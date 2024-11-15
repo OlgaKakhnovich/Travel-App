@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,9 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
 
@@ -26,7 +27,6 @@ class AddTripFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private lateinit var storage: FirebaseStorage
 
     private var headerImageUri: Uri? = null
     private val galleryImageUris = mutableListOf<Uri>()
@@ -50,7 +50,6 @@ class AddTripFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        storage = FirebaseStorage.getInstance()
 
         addHeaderImage = view.findViewById(R.id.add_headerImage)
         addCity = view.findViewById(R.id.add_city)
@@ -62,7 +61,6 @@ class AddTripFragment : Fragment() {
         addDateTo = view.findViewById(R.id.add_date_to)
         buttonSaveTrip = view.findViewById(R.id.button_save)
 
-
         starViews = listOf(
             view.findViewById(R.id.star1),
             view.findViewById(R.id.star2),
@@ -70,7 +68,6 @@ class AddTripFragment : Fragment() {
             view.findViewById(R.id.star4),
             view.findViewById(R.id.star5)
         )
-
 
         starViews.forEachIndexed { index, imageView ->
             imageView.setOnClickListener {
@@ -101,8 +98,11 @@ class AddTripFragment : Fragment() {
 
         buttonSaveTrip.setOnClickListener {
             saveTripToFirestore()
-            val intent = Intent(activity, ProfilFragment::class.java)
-            startActivity(intent)
+            parentFragmentManager.commit {
+                replace(R.id.frame_container, ProfilFragment())
+                addToBackStack(null)
+            }
+
         }
 
         return view
@@ -282,6 +282,10 @@ class AddTripFragment : Fragment() {
         val dateTo = addDateTo.text.toString()
         val userId = auth.currentUser?.uid ?: ""
 
+
+        val headerImageBase64 = headerImageUri?.let { uri -> convertUriToBase64(uri) }
+        val galleryImagesBase64 = galleryImageUris.mapNotNull { convertUriToBase64(it) }
+
         val tripData = hashMapOf(
             "city" to city,
             "country" to country,
@@ -290,7 +294,9 @@ class AddTripFragment : Fragment() {
             "dateFrom" to dateFrom,
             "dateTo" to dateTo,
             "rating" to selectedRating,
-            "userId" to userId
+            "userId" to userId,
+            "headerImage" to headerImageBase64,
+            "galleryImages" to galleryImagesBase64
         )
 
         db.collection("places").add(tripData)
@@ -300,5 +306,17 @@ class AddTripFragment : Fragment() {
             .addOnFailureListener { e ->
                 Toast.makeText(requireContext(), "Błąd: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun convertUriToBase64(uri: Uri): String? {
+        return try {
+            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }
