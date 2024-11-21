@@ -1,9 +1,12 @@
 data class Trip(
-    val city: String = "",
-    val country: String = "",
-    val dateFrom: String = "",
-    val dateTo: String = "",
-    val rating: Int = 0,
-    val imageUrl: String? = null,
-    val imageBase64: String? = null
+    var city: String = "",
+    var country: String = "",
+    var dateFrom: String = "",
+    var dateTo: String = "",
+    var rating: Double = 0.0,
+    var headerImage: String? = null,
+    var userId: String? = null,
+    var tips: String? = null,
+    var opinion: String? = null,
+
 )

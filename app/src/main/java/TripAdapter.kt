@@ -1,16 +1,15 @@
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.travel_application.R
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import java.io.ByteArrayInputStream
 
 class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
     FirestoreRecyclerAdapter<Trip, TripAdapter.TripViewHolder>(options) {
@@ -40,29 +39,20 @@ class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
             dateToTextView.text = trip.dateTo
             ratingTextView.text = trip.rating.toString()
 
+            setImage(trip.headerImage)
+        }
 
-            if (!trip.imageBase64.isNullOrEmpty()) {
+        private fun setImage(imageBase64: String?) {
+            if (!imageBase64.isNullOrEmpty()) {
                 try {
-
-                    val imageBytes = Base64.decode(trip.imageBase64, Base64.DEFAULT)
-                    val inputStream = ByteArrayInputStream(imageBytes)
-                    val bitmap = BitmapFactory.decodeStream(inputStream)
-
-
+                    val imageBytes = Base64.decode(imageBase64, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                     imageView.setImageBitmap(bitmap)
                 } catch (e: Exception) {
+                    Log.e("TripAdapter", "Błąd dekodowania obrazu Base64: ${e.message}")
+                    e.printStackTrace()
 
-                    imageView.setImageResource(android.R.drawable.ic_menu_gallery)
                 }
-            } else if (!trip.imageUrl.isNullOrEmpty()) {
-
-                Glide.with(itemView.context)
-                    .load(trip.imageUrl)
-                    .placeholder(android.R.drawable.ic_menu_gallery)
-                    .into(imageView)
-            } else {
-
-                imageView.setImageResource(android.R.drawable.ic_menu_gallery)
             }
         }
     }

@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import TripAdapter
-
 
 class ListTravelFragment : Fragment() {
 
@@ -27,22 +27,22 @@ class ListTravelFragment : Fragment() {
 
         db = FirebaseFirestore.getInstance()
 
-
         recyclerView = view.findViewById(R.id.list_travel)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        val currentUser = FirebaseAuth.getInstance().currentUser
 
-        val query = db.collection("places")
+        if (currentUser != null) {
+            val query = db.collection("places")
+                .whereEqualTo("userId", currentUser.uid)
 
+            val options = FirestoreRecyclerOptions.Builder<Trip>()
+                .setQuery(query, Trip::class.java)
+                .build()
 
-        val options = FirestoreRecyclerOptions.Builder<Trip>()
-            .setQuery(query, Trip::class.java)
-            .build()
-
-        adapter = TripAdapter(options)
-
-
-        recyclerView.adapter = adapter
+            adapter = TripAdapter(options)
+            recyclerView.adapter = adapter
+        }
 
         return view
     }
