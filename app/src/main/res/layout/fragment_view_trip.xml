@@ -258,6 +258,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/list_opinion_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/afacad"
@@ -277,6 +278,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/list_tips_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/afacad"

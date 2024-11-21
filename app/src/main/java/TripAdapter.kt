@@ -14,6 +14,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
     FirestoreRecyclerAdapter<Trip, TripAdapter.TripViewHolder>(options) {
 
+    var onItemClickListener: ((Trip) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item, parent, false)
@@ -21,7 +23,17 @@ class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
     }
 
     override fun onBindViewHolder(holder: TripViewHolder, position: Int, model: Trip) {
+
+        val documentSnapshot = snapshots.getSnapshot(position)
+        model.id = documentSnapshot.id
+
+
         holder.bind(model)
+
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.invoke(model)
+        }
     }
 
     class TripViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,6 +51,7 @@ class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
             dateToTextView.text = trip.dateTo
             ratingTextView.text = trip.rating.toString()
 
+
             setImage(trip.headerImage)
         }
 
@@ -51,7 +64,6 @@ class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
                 } catch (e: Exception) {
                     Log.e("TripAdapter", "Błąd dekodowania obrazu Base64: ${e.message}")
                     e.printStackTrace()
-
                 }
             }
         }
