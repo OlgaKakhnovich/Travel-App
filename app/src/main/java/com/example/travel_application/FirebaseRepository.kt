@@ -3,6 +3,7 @@ package com.example.travel_application
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Locale
 
 class FirebaseRepository(private val context: Context) {
     private val db = FirebaseFirestore.getInstance()
@@ -136,6 +137,26 @@ class FirebaseRepository(private val context: Context) {
         }
     }
 
+
+    fun getCountryCode(onSuccess: (String)->Unit, onFailure: (Exception)->Unit){
+        if(userId!=null){
+            val userRef = db.collection("user").document(userId)
+            userRef.get()
+                .addOnSuccessListener { document ->
+                    if(document!=null && document.exists()){
+                        val name = document.get("countryCode") ?: "countryCode"
+                        onSuccess(name.toString())
+                    }else{
+                        onFailure(Exception("Nie znaleziono danych"))
+                    }
+                }
+                .addOnFailureListener {
+                    onFailure(Exception("Błąd pobierania kraja"))
+                }
+        }else{
+            onFailure(Exception("Użytkownik niezalogowany"))
+        }
+    }
 
 
     //getPassword

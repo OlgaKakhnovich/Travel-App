@@ -48,6 +48,7 @@ class AddTripFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_trip, container, false)
 
+
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
@@ -60,6 +61,15 @@ class AddTripFragment : Fragment() {
         addDateFrom = view.findViewById(R.id.add_date_from)
         addDateTo = view.findViewById(R.id.add_date_to)
         buttonSaveTrip = view.findViewById(R.id.button_save)
+
+        val args = arguments
+        if(args!=null){
+            val country = args.getString("country");
+            val city = args.getString("city");
+
+            addCountry.setText(country);
+            addCity.setText(city);
+        }
 
         starViews = listOf(
             view.findViewById(R.id.star1),
@@ -317,6 +327,13 @@ class AddTripFragment : Fragment() {
         } catch (e: Exception) {
             e.printStackTrace()
             null
+        }
+    }
+
+    companion object{
+
+        fun newInstance()=AddTripFragment().apply {
+            arguments = Bundle().apply {  }
         }
     }
 }

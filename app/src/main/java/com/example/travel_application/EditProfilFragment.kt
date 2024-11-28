@@ -1,5 +1,7 @@
 package com.example.travel_application
 
+import android.Manifest
+import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,10 +14,21 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import com.google.firebase.firestore.SetOptions
+import java.io.ByteArrayOutputStream
+import android.util.Base64
+import android.app.DatePickerDialog
+import android.graphics.Bitmap
+import com.hbb20.CountryCodePicker
 
 class EditProfilFragment : Fragment() {
 
@@ -23,11 +36,9 @@ class EditProfilFragment : Fragment() {
     private val userId = FirebaseAuth.getInstance().currentUser!!.uid
     private var db = Firebase.firestore
     private lateinit var firebaseAuth: FirebaseAuth
-    private  var imageUri: Uri?=null
-    private var pickImg = 100
-     //private val storage = Firebase.storage
      private lateinit var firebaseRepository: FirebaseRepository
-    //lateinit var imageView: imageView
+     private lateinit var countryCodePicker: CountryCodePicker
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +47,9 @@ class EditProfilFragment : Fragment() {
         binding = FragmentEditProfilBinding.inflate(inflater,container,false)
         firebaseRepository = FirebaseRepository(requireContext())
         firebaseAuth = FirebaseAuth.getInstance()
-        //loadImageFromFirebase
-        //funkcja dla zmiany zdjecia
+
+        countryCodePicker = binding.ccp
+
 
         firebaseRepository.getName(
             onSuccess = {
@@ -56,13 +68,6 @@ class EditProfilFragment : Fragment() {
             }
         )
 
-        firebaseRepository.getLocation(
-            onSuccess = { location ->
-                binding.location.setText(location)
-            },
-            onFailure = {binding.location.setText("Edytuj lokalizacje")}
-        )
-
         firebaseRepository.getAbout(
             onSuccess = { about ->
                 binding.about.setText(about)
@@ -78,16 +83,19 @@ class EditProfilFragment : Fragment() {
             onFailure = {binding.about.setText("Imię użytkownika")}
         )
 
+        firebaseRepository.getCountryCode(
+            onSuccess = { countryCode ->
+            countryCodePicker.setCountryForNameCode(countryCode)
+            },
+            onFailure = {}
+        )
 
-        //zdjecie, haslo
+
+
+
 
         binding.confirmButton.setOnClickListener{
-            val name = binding.name.text.toString().trim()
-            val lastname = binding.surname.text.toString().trim()
-            val username = binding.username.text.toString().trim()
-            val location = binding.location.text.toString().trim()
-            val about = binding.about.text.toString().trim()
-            updateUser(name, lastname, username, location.ifEmpty { "" }, about.ifEmpty { "" })
+            updateUser()
 
             val intent = Intent(activity, MenuActivity::class.java)
             startActivity(intent)
@@ -97,13 +105,22 @@ class EditProfilFragment : Fragment() {
     }
 
 
-    private fun updateUser(name: String, lastname: String,username: String,  location: String?, about: String?){
+
+
+
+
+    private fun updateUser(){
+        val name = binding.name.text.toString().trim()
+        val lastname = binding.surname.text.toString().trim()
+        val username = binding.username.text.toString().trim()
+
+        val selectedCountryCodeInt = countryCodePicker.selectedCountryCodeAsInt
+        val selectedCountryCodeName = countryCodePicker.selectedCountryNameCode
+        val selectedCountryName = countryCodePicker.selectedCountryName
+        val about = binding.about.text.toString().trim().ifEmpty { "" }
+
+
         if(name.isNotEmpty() && lastname.isNotEmpty()){
-/*
-            if(imageUri!=null){
-                //img dodamy pozniej
-            }
-            */
             val userData = mutableMapOf<String, Any>(
                 "name" to name,
                 "lastname" to lastname,
@@ -112,16 +129,21 @@ class EditProfilFragment : Fragment() {
             val userRef = db.collection("user").document(userId)
             userRef.get().addOnSuccessListener { document ->
                 if(document.exists()){
-                    val locationExists = document.contains("location")
+
+                    val countryExists = document.contains("country")
                     val aboutExists = document.contains("about")
 
-                    if(location!=null){
-                        if(locationExists){
-                            userRef.update( "location", location)
+                   if(selectedCountryCodeInt!=null){
+                       val countryData = mutableMapOf<String, Any>(
+                           "countryInt" to selectedCountryCodeInt,
+                           "countryCode" to selectedCountryCodeName,
+                       )
+                        if(countryExists){
+                            userRef.update( countryData)
                                 .addOnSuccessListener { Log.d(TAG, "Zmiany zostały zapisane") }
                                 .addOnFailureListener { e->Log.w(TAG, "Zmiany nie zostały zapisane ", e) }
                         }else{
-                            userRef.set(mapOf("location" to location), SetOptions.merge())
+                            userRef.set(countryData)
                                 .addOnSuccessListener { Log.d(TAG, "Zmiany zostały zapisane") }
                                 .addOnFailureListener { e->Log.w(TAG, "Zmiany nie zostały zapisane ", e) }
                         }

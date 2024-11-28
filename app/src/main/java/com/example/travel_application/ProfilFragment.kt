@@ -2,9 +2,8 @@ package com.example.travel_application
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.os.Binder
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +11,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import com.devs.vectorchildfinder.VectorChildFinder
 import com.example.travel_application.databinding.FragmentProfilBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.hbb20.CountryCodePicker
+import java.util.Locale
 
 
 class ProfilFragment : Fragment() {
@@ -26,12 +30,13 @@ class ProfilFragment : Fragment() {
     private var db = Firebase.firestore
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseRepository: FirebaseRepository
+    private lateinit var countryCodePicker: CountryCodePicker
     private lateinit var myTrips: Button
     private lateinit var addTrip: Button
     private lateinit var addWish: Button
 
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "UseCompatLoadingForDrawables")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +44,14 @@ class ProfilFragment : Fragment() {
         binding = FragmentProfilBinding.inflate(inflater,container, false)
         firebaseRepository =FirebaseRepository(requireContext())
         firebaseAuth = FirebaseAuth.getInstance()
+
+       val imageView = binding.map
+
+       val vector = VectorChildFinder(requireContext(), R.drawable.map_low, imageView )
+
+        val path = vector.findPathByName("US")
+        path.fillColor = Color.RED
+        imageView.invalidate()
 
         firebaseRepository.getAbout(
             onSuccess = { about ->
@@ -54,22 +67,15 @@ class ProfilFragment : Fragment() {
             onFailure = { binding.about.text = "" }
         )
 
-        firebaseRepository.getLocation(
-            onSuccess = {userLocation ->
-                binding.userCity.text = userLocation
+        firebaseRepository.getCountryCode(
+            onSuccess = {countryCode ->
+                if(!countryCode.isNullOrEmpty()){
+                    val countryName = getCountryNameFromCode(countryCode)
+                    binding.userCity.text = countryName
+                }
             },
-            onFailure = {binding.userCity.text = ""}
+            onFailure = {binding.userCity.text=""}
         )
-
-/*  z dolnym menu
-        addTrip = binding.addPlace
-        addTrip.setOnClickListener {
-            parentFragmentManager.commit {
-                replace(R.id.frame_container, AddTripFragment())
-                addToBackStack(null)
-            }
-        }*/
-
 
         //bez menu
 
@@ -101,11 +107,25 @@ class ProfilFragment : Fragment() {
         return binding.root
     }
 
+    private fun changeVectorDrawablePathColor(drawable: VectorDrawableCompat, name: String, color: Int) {
+
+
+    }
+
+
+
+
+    private fun getCountryNameFromCode(countryCode: String): String {
+        val locale = Locale("", countryCode)
+        return locale.displayCountry
+    }
+
     @SuppressLint("MissingInflatedId")
     private fun showAddWishDialog() {
         val dialogView = layoutInflater.inflate(R.layout.fragment_add_wish, null)
 
-        val enterCountry = dialogView.findViewById<EditText>(R.id.enterCountryWish)
+        countryCodePicker = dialogView.findViewById<CountryCodePicker>(R.id.ccp_wish)
+
         val enterCity = dialogView.findViewById<EditText>(R.id.enterCityWish)
         val acceptBtn = dialogView.findViewById<Button>(R.id.acceptBtn)
         val cancelBtn = dialogView.findViewById<TextView>(R.id.cancelBtn)
@@ -116,11 +136,12 @@ class ProfilFragment : Fragment() {
         val alertDialog = dialogBuilder.create()
 
         acceptBtn.setOnClickListener {
-            val country = enterCountry.text.toString()
+            val selectedCountryCodeInt = countryCodePicker.selectedCountryCodeAsInt
+            val selectedCountryCodeName = countryCodePicker.selectedCountryNameCode
             val city = enterCity.text.toString()
 
-            if(country.isNotEmpty() && city.isNotEmpty()){
-                saveDataToBase(country,city)
+            if(selectedCountryCodeInt!=null && city.isNotEmpty()){
+                saveDataToBase(city, selectedCountryCodeInt, selectedCountryCodeName)
                 alertDialog.dismiss()
             }else{
                 Toast.makeText(requireContext(), "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
@@ -134,11 +155,12 @@ class ProfilFragment : Fragment() {
        alertDialog.show()
     }
 
-    private fun saveDataToBase(country: String, city: String) {
+    private fun saveDataToBase(city: String, countryCode: Int, countryName: String) {
         val wishRef = db.collection("user").document(userId).collection("wish")
         val wishMap = hashMapOf(
-            "country" to country,
-            "city" to city
+            "countryInt" to countryCode,
+            "city" to city,
+            "countryName" to countryName,
         )
 
         wishRef.document().set(wishMap).addOnFailureListener {

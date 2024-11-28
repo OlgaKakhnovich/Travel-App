@@ -29,7 +29,8 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
         val currentItem = dataList[position]
 
         holder.city.text = currentItem.city.split(" ")[0]
-        holder.country.text = currentItem.country.split(" ")[0]
+        holder.country.text = currentItem.country!!.split(" ")[0]
+
 
         holder.deleteWish.setOnClickListener{
             val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(holder.itemView.context)
@@ -50,7 +51,6 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
         holder.acceptWish.setOnClickListener{
             val fragment: Fragment = AddTripFragment()
             val args = Bundle()
-            args.putString("documentId", currentItem.documentId)
             args.putString("country", currentItem.country)
             args.putString("city", currentItem.city)
             fragment.arguments = args
@@ -83,7 +83,7 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val country: TextView = itemView.findViewById(R.id.wishCountry)
         val city: TextView = itemView.findViewById(R.id.wishCity)
-       // val imageView: ImageView = itemView.findViewById(R.id.wishImage)
+        val imageView: ImageView = itemView.findViewById(R.id.wishImage)
         val acceptWish : ImageView = itemView.findViewById(R.id.acceptWish)
         val deleteWish : ImageView = itemView.findViewById(R.id.deleteWish)
 

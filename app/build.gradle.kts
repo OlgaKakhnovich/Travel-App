@@ -44,6 +44,7 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -66,6 +67,12 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
 
+    implementation("com.hbb20:ccp:2.5.0")
+
+    implementation ("com.github.devendroid:vectorchildfinder:1.0.0")
 
 
 }
+
+
+

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/gradient"
     tools:context=".ProfilFragment">
 
@@ -23,8 +23,8 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             android:paddingRight="1dp"
             android:paddingBottom="1dp"
@@ -39,7 +39,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="User name"
-            android:textSize="18dp"
+            android:textSize="22dp"
             android:textColor="@color/purple_dark"
             android:textStyle="bold" />
 
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:text="@string/procent_world"
             android:fontFamily="@font/afacad"
-            android:textSize="18dp"
+            android:textSize="21dp"
             android:textColor="@color/purple_dark"
             android:textStyle="bold"
             />
@@ -80,7 +80,7 @@
             android:layout_marginHorizontal="5dp"
             android:text="00"
             android:textColor="@color/purple_dark"
-            android:textSize="18dp"
+            android:textSize="21dp"
             android:textStyle="bold"
             />
 
@@ -90,16 +90,27 @@
             android:fontFamily="@font/afacad"
             android:textColor="@color/purple_dark"
             android:text="%"
-            android:textSize="18dp"
+            android:textSize="21dp"
             android:textStyle="bold"
             />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="363dp"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/afacad"
+        android:gravity="center_horizontal"
+        android:text="Odwiedzono"
+        android:textColor="@color/purple_dark"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <!--horizontal-->
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-      android:layout_marginTop="12dp"
+      android:layout_marginTop="5dp"
        android:gravity="center_horizontal"
        >
        <!--vertical-->
@@ -107,16 +118,16 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:orientation="vertical"
-           android:layout_marginHorizontal="12dp">
+           android:layout_marginHorizontal="50dp">
 
            <TextView
                android:id="@+id/count_country_text"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:fontFamily="@font/afacad"
-               android:text="@string/count_country"
+               android:text="Krajów:"
                android:textColor="@color/purple_dark"
-               android:textSize="10dp"
+               android:textSize="18dp"
                android:gravity="center"
                android:textStyle="bold"
                />
@@ -138,7 +149,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:orientation="vertical"
-           android:layout_marginHorizontal="12dp">
+           android:layout_marginHorizontal="50dp">
 
 
            <TextView
@@ -146,9 +157,9 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:fontFamily="@font/afacad"
-               android:text="@string/count_city"
+               android:text="Miast:"
                android:textColor="@color/purple_dark"
-               android:textSize="10dp"
+               android:textSize="18dp"
                android:gravity="center"
                android:textStyle="bold"
                />
@@ -166,37 +177,7 @@
 
        </LinearLayout>
 
-       <LinearLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           android:layout_marginHorizontal="12dp">
 
-
-           <TextView
-               android:id="@+id/count_favorite_city_text"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/afacad"
-               android:text="@string/count_places"
-               android:textColor="@color/purple_dark"
-               android:textSize="10dp"
-               android:gravity="center"
-               android:textStyle="bold"
-               />
-
-           <TextView
-               android:id="@+id/count_favorite_city"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/afacad"
-               android:text="00"
-               android:gravity="center"
-               android:textColor="@color/purple_dark"
-               android:textSize="30sp"
-               android:textStyle="bold" />
-
-       </LinearLayout>
 
    </LinearLayout>
 
@@ -234,14 +215,19 @@
 
     <LinearLayout
         android:id="@+id/mini_map"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_width="wrap_content"
+        android:layout_height="197dp"
         android:layout_marginTop="18dp"
-        android:background="@drawable/przycisk"
-        android:backgroundTint="@color/white"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:orientation="vertical">
         <!-- Pole Mapa -->
+
+        <ImageView
+            android:id="@+id/map"
+            android:layout_width="362dp"
+            android:layout_height="220dp"
+            app:srcCompat="@drawable/map_low" />
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -255,26 +241,26 @@
 
         <Button
             android:id="@+id/add_place"
-            android:layout_width="140dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
             android:backgroundTint="@color/orange3"
             android:fontFamily="@font/afacad"
             android:text="@string/add_place"
             android:textColor="@color/purple_dark"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/add_wish"
-            android:layout_width="140dp"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="12dp"
             android:backgroundTint="@color/orange3"
             android:text="@string/add_wish"
             android:fontFamily="@font/afacad"
             android:textColor="@color/purple_dark"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -295,7 +281,7 @@
             android:text="@string/my_trip"
             android:fontFamily="@font/afacad"
             android:backgroundTint="@color/orange3"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold"/>
 
 </LinearLayout>
