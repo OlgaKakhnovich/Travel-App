@@ -1,6 +1,8 @@
 package com.example.travel_application
 
 import Trip
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -12,9 +14,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import java.io.ByteArrayInputStream
+import java.util.Locale
 
 class ViewTripFragment : Fragment() {
 
@@ -89,11 +90,15 @@ class ViewTripFragment : Fragment() {
             }
     }
 
+    private fun getCountryNameFromCode(countryCode: String): String {
+        val locale = Locale("", countryCode)
+        return locale.displayCountry
+    }
     private fun updateUI() {
 
 
         cityTextView.text = trip.city ?: "Unknown city"
-        countryTextView.text = trip.country ?: "Unknown country"
+        countryTextView.text = getCountryNameFromCode(trip.countryCode) ?: "Unknown country"
         dateFromTextView.text = trip.dateFrom ?: "No date"
         dateToTextView.text = trip.dateTo ?: "No date"
         ratingTextView.text = trip.rating?.toString() ?: "No rating"

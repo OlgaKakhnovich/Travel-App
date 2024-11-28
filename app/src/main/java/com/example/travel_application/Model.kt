@@ -1,5 +1,6 @@
 package com.example.travel_application
 
-class Model(var documentId: String?=null, var country: String?=null, var city: String="", var img: String? = null) {
+class Model(var documentId: String?=null, var countryName: String?=null, var city: String="") {
     constructor():this("", "", "")
+
 }

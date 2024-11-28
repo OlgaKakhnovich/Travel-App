@@ -11,10 +11,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Locale
 
 class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -28,8 +28,8 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = dataList[position]
 
-        holder.city.text = currentItem.city.split(" ")[0]
-        holder.country.text = currentItem.country!!.split(" ")[0]
+        holder.city.text =currentItem.city.split(" ")[0]
+        holder.countryName.text = nameCodeToName(currentItem.countryName!!.split(" ")[0])
 
 
         holder.deleteWish.setOnClickListener{
@@ -51,7 +51,7 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
         holder.acceptWish.setOnClickListener{
             val fragment: Fragment = AddTripFragment()
             val args = Bundle()
-            args.putString("country", currentItem.country)
+            args.putString("country", currentItem.countryName)
             args.putString("city", currentItem.city)
             fragment.arguments = args
 
@@ -76,14 +76,17 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
             }
     }
 
+    private  fun nameCodeToName(name: String): String{
+        val locale = Locale("", name)
+        return locale.displayCountry
+    }
 
     override fun getItemCount(): Int {
         return dataList.size
     }
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val country: TextView = itemView.findViewById(R.id.wishCountry)
+        val countryName: TextView = itemView.findViewById(R.id.wishCountry)
         val city: TextView = itemView.findViewById(R.id.wishCity)
-        val imageView: ImageView = itemView.findViewById(R.id.wishImage)
         val acceptWish : ImageView = itemView.findViewById(R.id.acceptWish)
         val deleteWish : ImageView = itemView.findViewById(R.id.deleteWish)
 

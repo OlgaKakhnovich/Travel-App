@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travel_application.R
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import java.util.Locale
 
 class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
     FirestoreRecyclerAdapter<Trip, TripAdapter.TripViewHolder>(options) {
@@ -46,13 +47,18 @@ class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
 
         fun bind(trip: Trip) {
             cityTextView.text = trip.city
-            countryTextView.text = trip.country
+            countryTextView.text = nameCodeToName(trip.countryCode)
             dateFromTextView.text = trip.dateFrom
             dateToTextView.text = trip.dateTo
             ratingTextView.text = trip.rating.toString()
 
 
             setImage(trip.headerImage)
+        }
+
+        private  fun nameCodeToName(name: String): String{
+            val locale = Locale("", name)
+            return locale.displayCountry
         }
 
         private fun setImage(imageBase64: String?) {

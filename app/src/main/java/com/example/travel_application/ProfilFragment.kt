@@ -9,11 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.devs.vectorchildfinder.VectorChildFinder
 import com.example.travel_application.databinding.FragmentProfilBinding
 import com.google.firebase.Firebase
@@ -47,11 +47,7 @@ class ProfilFragment : Fragment() {
 
        val imageView = binding.map
 
-       val vector = VectorChildFinder(requireContext(), R.drawable.map_low, imageView )
-
-        val path = vector.findPathByName("US")
-        path.fillColor = Color.RED
-        imageView.invalidate()
+        colorMap(imageView)
 
         firebaseRepository.getAbout(
             onSuccess = { about ->
@@ -82,9 +78,9 @@ class ProfilFragment : Fragment() {
         addTrip = binding.addPlace
         addTrip.setOnClickListener {
 
-            val bottomNavigationView = requireActivity().findViewById<View>(R.id.bottom_navigation)
+           /* val bottomNavigationView = requireActivity().findViewById<View>(R.id.bottom_navigation)
             bottomNavigationView.visibility = View.GONE
-
+*/
             parentFragmentManager.commit {
                 replace(R.id.frame_container, AddTripFragment())
                 addToBackStack(null)
@@ -107,12 +103,25 @@ class ProfilFragment : Fragment() {
         return binding.root
     }
 
-    private fun changeVectorDrawablePathColor(drawable: VectorDrawableCompat, name: String, color: Int) {
-
-
+    private fun colorMap(imageView: ImageView) {
+        val vector = VectorChildFinder(requireContext(), R.drawable.map_low, imageView )
+        firebaseRepository.fetchCountryCodeByUserId {countryCodes ->
+            if(countryCodes.isNotEmpty()){
+                for(countryCode in countryCodes){
+                    try{
+                        val path = vector.findPathByName(countryCode)
+                        path.fillColor = Color.CYAN
+                    }catch (e: Exception){
+                        println("Not find country with id: ${countryCode}")
+                    }
+                }
+                imageView.invalidate()
+            }
+            else{
+                println("Not find")
+            }
+        }
     }
-
-
 
 
     private fun getCountryNameFromCode(countryCode: String): String {

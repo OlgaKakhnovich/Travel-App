@@ -3,7 +3,7 @@ package com.example.travel_application
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.Locale
+import com.google.firebase.firestore.QuerySnapshot
 
 class FirebaseRepository(private val context: Context) {
     private val db = FirebaseFirestore.getInstance()
@@ -156,6 +156,27 @@ class FirebaseRepository(private val context: Context) {
         }else{
             onFailure(Exception("Użytkownik niezalogowany"))
         }
+    }
+
+    fun fetchCountryCodeByUserId(callback:(List<String>)->Unit){
+        val countryCodeList = mutableListOf<String>()
+
+        db.collection("places")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                for(document in querySnapshot.documents){
+                    val countryCode = document.getString("countryCode")
+                    if (countryCode !=null){
+                        countryCodeList.add(countryCode)
+                    }
+                }
+                callback(countryCodeList)
+            }
+            .addOnFailureListener { exception ->
+                println("Error ${exception.message}")
+                callback(emptyList())
+            }
     }
 
 

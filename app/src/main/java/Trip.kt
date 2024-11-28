@@ -4,7 +4,7 @@ import com.google.firebase.firestore.Exclude
 
 data class Trip(
     var city: String = "",
-    var country: String = "",
+    var countryCode: String = "",
     var dateFrom: String = "",
     var dateTo: String = "",
     var rating: Double = 0.0,
@@ -19,7 +19,7 @@ data class Trip(
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         city = parcel.readString() ?: "",
-        country = parcel.readString() ?: "",
+        countryCode = parcel.readString() ?: "",
         dateFrom = parcel.readString() ?: "",
         dateTo = parcel.readString() ?: "",
         rating = parcel.readDouble(),
@@ -34,7 +34,7 @@ data class Trip(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(city)
-        parcel.writeString(country)
+        parcel.writeString(countryCode)
         parcel.writeString(dateFrom)
         parcel.writeString(dateTo)
         parcel.writeDouble(rating)

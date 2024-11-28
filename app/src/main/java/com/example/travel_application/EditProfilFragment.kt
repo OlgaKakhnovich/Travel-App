@@ -1,33 +1,19 @@
 package com.example.travel_application
 
-import android.Manifest
-import android.app.Activity
-import android.net.Uri
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.travel_application.databinding.FragmentEditProfilBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.firestore
-import android.content.ContentValues.TAG
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.provider.MediaStore
-import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.commit
 import com.google.firebase.firestore.SetOptions
-import java.io.ByteArrayOutputStream
-import android.util.Base64
-import android.app.DatePickerDialog
-import android.graphics.Bitmap
+import com.google.firebase.firestore.firestore
 import com.hbb20.CountryCodePicker
 
 class EditProfilFragment : Fragment() {
@@ -116,7 +102,6 @@ class EditProfilFragment : Fragment() {
 
         val selectedCountryCodeInt = countryCodePicker.selectedCountryCodeAsInt
         val selectedCountryCodeName = countryCodePicker.selectedCountryNameCode
-        val selectedCountryName = countryCodePicker.selectedCountryName
         val about = binding.about.text.toString().trim().ifEmpty { "" }
 
 
@@ -135,7 +120,6 @@ class EditProfilFragment : Fragment() {
 
                    if(selectedCountryCodeInt!=null){
                        val countryData = mutableMapOf<String, Any>(
-                           "countryInt" to selectedCountryCodeInt,
                            "countryCode" to selectedCountryCodeName,
                        )
                         if(countryExists){

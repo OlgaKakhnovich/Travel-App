@@ -1,6 +1,7 @@
 package com.example.travel_application
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -13,13 +14,18 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.hbb20.CountryCodePicker
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
 
@@ -41,7 +47,10 @@ class AddTripFragment : Fragment() {
     private lateinit var buttonSaveTrip: Button
     private lateinit var starViews: List<ImageView>
     private var selectedRating = 0
+    private lateinit var firebaseRepository: FirebaseRepository
+    private lateinit var countryCodePicker: CountryCodePicker
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +63,6 @@ class AddTripFragment : Fragment() {
 
         addHeaderImage = view.findViewById(R.id.add_headerImage)
         addCity = view.findViewById(R.id.add_city)
-        addCountry = view.findViewById(R.id.add_country)
         addOpinion = view.findViewById(R.id.add_opinion)
         addTips = view.findViewById(R.id.add_tips)
         buttonAddPhotos = view.findViewById(R.id.button_add_photos)
@@ -62,12 +70,14 @@ class AddTripFragment : Fragment() {
         addDateTo = view.findViewById(R.id.add_date_to)
         buttonSaveTrip = view.findViewById(R.id.button_save)
 
+        countryCodePicker = view.findViewById(R.id.ccp_add)
+
         val args = arguments
         if(args!=null){
             val country = args.getString("country");
             val city = args.getString("city");
 
-            addCountry.setText(country);
+            countryCodePicker.setCountryForNameCode(country)
             addCity.setText(city);
         }
 
@@ -285,7 +295,7 @@ class AddTripFragment : Fragment() {
 
     private fun saveTripToFirestore() {
         val city = addCity.text.toString()
-        val country = addCountry.text.toString()
+        val selectedCountryCodeName = countryCodePicker.selectedCountryNameCode
         val opinion = addOpinion.text.toString()
         val tips = addTips.text.toString()
         val dateFrom = addDateFrom.text.toString()
@@ -298,7 +308,7 @@ class AddTripFragment : Fragment() {
 
         val tripData = hashMapOf(
             "city" to city,
-            "country" to country,
+            "countryCode" to selectedCountryCodeName,
             "opinion" to opinion,
             "tips" to tips,
             "dateFrom" to dateFrom,
