@@ -54,7 +54,7 @@
     <string name="count_country">Odwiedzono krajów:</string>
     <string name="count_city">Odwiedzono miast:</string>
     <string name="count_places">Odwiedzono miejsc:</string>
-    <string name="procent_world">Poznany Świat: </string>
+    <string name="procent_world">Poznany świat: </string>
 
     <string name="add_place">Dodaj miejsce</string>
     <string name="add_wish">Dodaj życzenie </string>
@@ -64,13 +64,17 @@
     <string name="wish_list">Moje życzenia</string>
     <string name="settings">Ustawienia</string>
     <string name="enter_country">Wprowadź kraj</string>
-    <string name="enter_city">Wprowadź miasto</string>
-    <string name="add">Dodać</string>
+    <string name="enter_city">Wprowadź miasto:</string>
+    <string name="add">Dodaj</string>
     <string name="my_trip">Moje podróże</string>
 
 
 
     <string name="ok">Zapisz</string>
+
+
+    <string name="cities">Miasta</string>
+    <string name="countries">Kraje</string>
 
 
 </resources>

@@ -6,27 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".ViewTripFragment">
 
-    <!-- Tło obrazka -->
+
     <ImageView
         android:id="@+id/headerImage"
         android:layout_width="wrap_content"
-        android:layout_height="360dp"
+        android:layout_height="450dp"
         android:scaleType="centerCrop"
         android:src="@drawable/samolot"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Ikona Wstecz -->
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_circle"
+        android:src="@drawable/arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Ikona Zapisz -->
+
     <ImageButton
         android:id="@+id/saveforlaterButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
         android:background="@drawable/bg_circle"
-        android:src="@drawable/add"
+        android:src="@drawable/save_button_states"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -24,7 +24,7 @@
         android:background="@color/purple_dark"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
-        app:itemIconSize="30dp"
+        app:itemIconSize="32dp"
         app:itemActiveIndicatorStyle="@color/orange1"
         />
 

@@ -12,19 +12,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="17dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginVertical="12dp"
-        android:gravity="center_horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_gravity="center"
             android:paddingRight="1dp"
             android:paddingBottom="1dp"
@@ -32,14 +32,21 @@
             android:src="@drawable/kwadrat"
             android:visibility="visible" />
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_marginVertical="12dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center_vertical">
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
+            android:gravity="left"
             android:text="User name"
-            android:textSize="22dp"
+            android:textSize="20sp"
             android:textColor="@color/purple_dark"
             android:textStyle="bold" />
 
@@ -47,11 +54,14 @@
             android:id="@+id/userCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:text="User city"
-            android:textSize="15dp"
+            android:layout_marginTop="5dp"
+            android:textSize="15sp"
             android:textColor="@color/purple_dark"
             android:textStyle="italic" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -59,132 +69,122 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        >
+        android:layout_marginTop="8dp"
+        android:gravity="left|center_horizontal">
 
-        <TextView
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="start|center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/afacad"
+                android:text="@string/procent_world"
+                android:textColor="@color/purple_dark"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/procent_world"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:fontFamily="@font/afacad"
+                android:text="00"
+                android:textColor="@color/purple_dark"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/afacad"
+                android:text="%"
+                android:textColor="@color/purple_dark"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/procent_world"
-            android:fontFamily="@font/afacad"
-            android:textSize="21dp"
-            android:textColor="@color/purple_dark"
-            android:textStyle="bold"
-            />
+            android:layout_gravity="center"
+            android:gravity="end|center_horizontal">
 
-        <TextView
-            android:id="@+id/procent_world"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/afacad"
-            android:layout_marginHorizontal="5dp"
-            android:text="00"
-            android:textColor="@color/purple_dark"
-            android:textSize="21dp"
-            android:textStyle="bold"
-            />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="22dp"
+                android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/afacad"
-            android:textColor="@color/purple_dark"
-            android:text="%"
-            android:textSize="21dp"
-            android:textStyle="bold"
-            />
+                <TextView
+                    android:id="@+id/count_country_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:gravity="center"
+                    android:text="@string/countries"
+                    android:textColor="@color/purple_dark"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/count_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:gravity="center"
+                    android:text="00"
+                    android:textColor="@color/purple_dark"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/count_city_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:gravity="center"
+                    android:text="@string/cities"
+                    android:textColor="@color/purple_dark"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/count_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:gravity="center"
+                    android:text="00"
+                    android:textColor="@color/purple_dark"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
     </LinearLayout>
-
-    <TextView
-        android:layout_width="363dp"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/afacad"
-        android:gravity="center_horizontal"
-        android:text="Odwiedzono"
-        android:textColor="@color/purple_dark"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-
-    <!--horizontal-->
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-      android:layout_marginTop="5dp"
-       android:gravity="center_horizontal"
-       >
-       <!--vertical-->
-       <LinearLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           android:layout_marginHorizontal="50dp">
-
-           <TextView
-               android:id="@+id/count_country_text"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/afacad"
-               android:text="Krajów:"
-               android:textColor="@color/purple_dark"
-               android:textSize="18dp"
-               android:gravity="center"
-               android:textStyle="bold"
-               />
-
-           <TextView
-               android:id="@+id/count_country"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/afacad"
-               android:text="00"
-               android:gravity="center"
-               android:textColor="@color/purple_dark"
-               android:textSize="30sp"
-               android:textStyle="bold" />
-
-       </LinearLayout>
-
-       <LinearLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           android:layout_marginHorizontal="50dp">
-
-
-           <TextView
-               android:id="@+id/count_city_text"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/afacad"
-               android:text="Miast:"
-               android:textColor="@color/purple_dark"
-               android:textSize="18dp"
-               android:gravity="center"
-               android:textStyle="bold"
-               />
-
-           <TextView
-               android:id="@+id/count_city"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/afacad"
-               android:text="00"
-               android:gravity="center"
-               android:textColor="@color/purple_dark"
-               android:textSize="30sp"
-               android:textStyle="bold" />
-
-       </LinearLayout>
-
-
-
-   </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         android:background="@drawable/przycisk"
         android:backgroundTint="@color/white"
@@ -212,21 +212,33 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/tripList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/purple_dark"
+        android:text="@string/my_trip"
+        android:fontFamily="@font/afacad"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/orange3"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
 
     <LinearLayout
         android:id="@+id/mini_map"
-        android:layout_width="wrap_content"
-        android:layout_height="197dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:layout_marginTop="18dp"
         android:orientation="vertical">
         <!-- Pole Mapa -->
 
         <ImageView
             android:id="@+id/map"
-            android:layout_width="362dp"
-            android:layout_height="220dp"
+            android:layout_width="370dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
             app:srcCompat="@drawable/map_low" />
-
 
     </LinearLayout>
 
@@ -241,11 +253,11 @@
 
         <Button
             android:id="@+id/add_place"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
             android:backgroundTint="@color/orange3"
             android:fontFamily="@font/afacad"
+            android:layout_weight="1"
             android:text="@string/add_place"
             android:textColor="@color/purple_dark"
             android:textSize="16sp"
@@ -253,38 +265,18 @@
 
         <Button
             android:id="@+id/add_wish"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="12dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/orange3"
             android:text="@string/add_wish"
             android:fontFamily="@font/afacad"
+            android:layout_marginLeft="10dp"
             android:textColor="@color/purple_dark"
             android:textSize="16sp"
             android:textStyle="bold"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        >
-        <!-- Pole Przyciscki -->
-
-        <Button
-            android:id="@+id/tripList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="12dp"
-            android:textColor="@color/purple_dark"
-            android:text="@string/my_trip"
-            android:fontFamily="@font/afacad"
-            android:backgroundTint="@color/orange3"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-
-</LinearLayout>
 </LinearLayout>
 
 

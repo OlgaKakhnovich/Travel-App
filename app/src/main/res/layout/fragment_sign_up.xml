@@ -64,7 +64,7 @@
             android:id="@+id/username_id"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/bg_circle"
             android:hint="@string/username"
@@ -144,6 +144,7 @@
             android:layout_height="wrap_content"
             android:text="@string/haveaccount"
             android:fontFamily="@font/afacad"
+            android:layout_marginTop="15dp"
             android:textAlignment="center"
             android:textColor="@color/orange2"
             android:textSize="12sp" />

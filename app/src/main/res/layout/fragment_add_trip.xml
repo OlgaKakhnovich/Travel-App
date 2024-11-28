@@ -13,7 +13,7 @@
     <ImageButton
         android:id="@+id/add_headerImage"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="300dp"
         android:backgroundTint="@color/orange1"
         android:src="@drawable/add"
         android:scaleType="centerInside"
@@ -24,6 +24,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+    <ImageButton
+        android:id="@+id/back2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_circle"
+        android:src="@drawable/arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <!-- Dolna część z detalami i opiniami -->
@@ -61,7 +70,7 @@
             <EditText
                 android:id="@+id/add_city"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/bg_circle"
                 android:hint="@string/add_city"
@@ -75,7 +84,7 @@
             <EditText
                 android:id="@+id/add_country"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="7dp"
                 android:background="@drawable/bg_circle"
                 android:drawablePadding="5dp"
@@ -113,8 +122,8 @@
                     android:layout_height="wrap_content">
                 <Button
                     android:id="@+id/add_date_from"
-                    android:layout_width="100dp"
-                    android:layout_height="35dp"
+                    android:layout_width="115dp"
+                    android:layout_height="40dp"
                     android:gravity="center"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/bg_circle"
@@ -140,8 +149,8 @@
 
                 <Button
                     android:id="@+id/add_date_to"
-                    android:layout_width="100dp"
-                    android:layout_height="35dp"
+                    android:layout_width="115dp"
+                    android:layout_height="40dp"
                     android:gravity="center"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/bg_circle"
@@ -259,7 +268,7 @@
         <Button
         android:id="@+id/button_save"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:fontFamily="@font/afacad"
         android:text="@string/ok"
