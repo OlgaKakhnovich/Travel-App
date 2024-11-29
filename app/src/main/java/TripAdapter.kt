@@ -58,7 +58,8 @@ class TripAdapter(options: FirestoreRecyclerOptions<Trip>) :
 
         private  fun nameCodeToName(name: String): String{
             val locale = Locale("", name)
-            return locale.displayCountry
+            val polishLocale = Locale("pl");
+            return locale.getDisplayCountry(polishLocale)
         }
 
         private fun setImage(imageBase64: String?) {

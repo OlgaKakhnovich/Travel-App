@@ -92,7 +92,8 @@ class ViewTripFragment : Fragment() {
 
     private fun getCountryNameFromCode(countryCode: String): String {
         val locale = Locale("", countryCode)
-        return locale.displayCountry
+        val polishLocale = Locale("pl");
+        return locale.getDisplayCountry(polishLocale)
     }
     private fun updateUI() {
 

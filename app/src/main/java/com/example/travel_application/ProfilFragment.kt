@@ -78,9 +78,9 @@ class ProfilFragment : Fragment() {
         addTrip = binding.addPlace
         addTrip.setOnClickListener {
 
-           /* val bottomNavigationView = requireActivity().findViewById<View>(R.id.bottom_navigation)
+            val bottomNavigationView = requireActivity().findViewById<View>(R.id.bottom_navigation)
             bottomNavigationView.visibility = View.GONE
-*/
+
             parentFragmentManager.commit {
                 replace(R.id.frame_container, AddTripFragment())
                 addToBackStack(null)
@@ -110,7 +110,7 @@ class ProfilFragment : Fragment() {
                 for(countryCode in countryCodes){
                     try{
                         val path = vector.findPathByName(countryCode)
-                        path.fillColor = Color.CYAN
+                        path.fillColor = Color.YELLOW
                     }catch (e: Exception){
                         println("Not find country with id: ${countryCode}")
                     }
@@ -126,7 +126,8 @@ class ProfilFragment : Fragment() {
 
     private fun getCountryNameFromCode(countryCode: String): String {
         val locale = Locale("", countryCode)
-        return locale.displayCountry
+        val polishLocale = Locale("pl");
+        return locale.getDisplayCountry(polishLocale)
     }
 
     @SuppressLint("MissingInflatedId")

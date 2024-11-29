@@ -78,8 +78,6 @@ class EditProfilFragment : Fragment() {
 
 
 
-
-
         binding.confirmButton.setOnClickListener{
             updateUser()
 

@@ -78,7 +78,8 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
 
     private  fun nameCodeToName(name: String): String{
         val locale = Locale("", name)
-        return locale.displayCountry
+        val polishLocale = Locale("pl");
+        return locale.getDisplayCountry(polishLocale)
     }
 
     override fun getItemCount(): Int {
