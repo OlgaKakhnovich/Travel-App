@@ -4,6 +4,9 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FirebaseRepository(private val context: Context) {
     private val db = FirebaseFirestore.getInstance()
@@ -158,27 +161,79 @@ class FirebaseRepository(private val context: Context) {
         }
     }
 
-    fun fetchCountryCodeByUserId(callback:(List<String>)->Unit){
-        val countryCodeList = mutableListOf<String>()
+
+
+    data class CountryData(val countryCode:String, val rating: Int, val date: Date)
+
+    fun fetchCountryCodeRatingDate(callback: (List<CountryData>) -> Unit){
+       val countryDataList = mutableListOf<CountryData>()
 
         db.collection("places")
             .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener { querySnapshot: QuerySnapshot ->
                 for(document in querySnapshot.documents){
-                    val countryCode = document.getString("countryCode")
-                    if (countryCode !=null){
-                        countryCodeList.add(countryCode)
+                    try{
+                        val countryCode = document.getString("countryCode")
+                        val rating = document.getLong("rating")?.toInt()?:0
+                        val dateString = document.getString("dateTo")
+                        val date = dateString?.let {
+                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(it)
+                        }
+                        if(countryCode!= null && date !=null){
+                            countryDataList.add(CountryData(countryCode, rating, date))
+                        }
+                    }catch (e: Exception){
+                        println("Error: ${e.message}")
                     }
                 }
-                callback(countryCodeList)
+                callback(countryDataList)
             }
             .addOnFailureListener { exception ->
-                println("Error ${exception.message}")
+                println("Error: ${exception.message}")
                 callback(emptyList())
             }
     }
 
+    fun fetchCountryCount(callback: (Int)->Unit){
+        db.collection("places")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                val countries = mutableSetOf<String>()
+                for(document in querySnapshot.documents){
+                    val countryCode = document.getString("countryCode")
+                    if(countryCode!=null){
+                        countries.add(countryCode)
+                    }
+                }
+                callback(countries.size)
+            }
+            .addOnFailureListener { exception ->
+                println("Error: ${exception.message}")
+                callback(0)
+            }
+    }
 
-    //getPassword
+    fun fetchCityCount(callback: (Int)->Unit){
+        db.collection("places")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                val cities = mutableSetOf<String>()
+                for(document in querySnapshot.documents){
+                    val city = document.getString("city")
+                    if(city!=null){
+                        cities.add(city)
+                    }
+                }
+                callback(cities.size)
+            }
+            .addOnFailureListener { exception ->
+                println("Error: ${exception.message}")
+                callback(0)
+            }
+    }
+
+
 }

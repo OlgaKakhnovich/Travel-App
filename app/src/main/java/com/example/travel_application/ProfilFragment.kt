@@ -2,7 +2,7 @@ package com.example.travel_application
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.graphics.Color
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +12,18 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.devs.vectorchildfinder.VectorChildFinder
 import com.example.travel_application.databinding.FragmentProfilBinding
+import com.github.chrisbanes.photoview.PhotoView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.hbb20.CountryCodePicker
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class ProfilFragment : Fragment() {
@@ -46,6 +49,9 @@ class ProfilFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
        val imageView = binding.map
+        imageView.setOnClickListener {
+            showImageDialog()
+        }
 
         colorMap(imageView)
 
@@ -72,6 +78,20 @@ class ProfilFragment : Fragment() {
             },
             onFailure = {binding.userCity.text=""}
         )
+
+
+        firebaseRepository.fetchCountryCount { countries ->
+            if(countries!=0){
+                val procent = ((countries * 100)/195.0).roundToInt()
+                binding.procentWorld.text = procent.toString()
+            }
+            binding.countCountry.text = countries.toString()
+        }
+
+        firebaseRepository.fetchCityCount { cities ->
+            binding.countCity.text = cities.toString()
+        }
+
 
         //bez menu
 
@@ -103,8 +123,54 @@ class ProfilFragment : Fragment() {
         return binding.root
     }
 
+    private fun showImageDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_map)
+
+        val photoView: PhotoView = dialog.findViewById(R.id.photo_view_map)
+        photoView.setImageResource(R.drawable.map_low)
+        colorMap(photoView)
+
+        dialog.show()
+    }
+
     private fun colorMap(imageView: ImageView) {
         val vector = VectorChildFinder(requireContext(), R.drawable.map_low, imageView )
+
+        firebaseRepository.fetchCountryCodeRatingDate {  countryData ->
+            if(countryData.isNotEmpty()){
+
+                val latestCountryDate = countryData
+                    .groupBy { it.countryCode }
+                    .mapValues { entry ->
+                        entry.value.maxByOrNull { it.date }
+                    }
+
+                val starColors = listOf(
+                    R.color.star_1,
+                    R.color.star_2,
+                    R.color.star_3,
+                    R.color.star_4,
+                    R.color.star_5
+                )
+
+                latestCountryDate.values.forEach{ countryData ->
+                    if(countryData !=null){
+                        try{
+                            val path =vector.findPathByName(countryData.countryCode)
+                            val color = starColors.getOrElse(countryData.rating -1){R.color.star}
+                            path.fillColor = ContextCompat.getColor(requireContext(), color)
+                        }catch (e: Exception){
+                            println("Error: ${e.message}")
+                        }
+                    }
+                }
+                imageView.invalidate()
+            }else{
+                println("Error-")
+            }
+        }
+/*
         firebaseRepository.fetchCountryCodeByUserId {countryCodes ->
             if(countryCodes.isNotEmpty()){
                 for(countryCode in countryCodes){
@@ -120,7 +186,7 @@ class ProfilFragment : Fragment() {
             else{
                 println("Not find")
             }
-        }
+        }*/
     }
 
 

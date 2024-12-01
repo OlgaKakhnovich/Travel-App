@@ -284,9 +284,18 @@ class AddTripFragment : Fragment() {
     }
 
     private fun updateStars(rating: Int) {
+
+        val starColors = listOf(
+            R.color.star_1,
+            R.color.star_2,
+            R.color.star_3,
+            R.color.star_4,
+            R.color.star_5
+        )
         starViews.forEachIndexed { index, imageView ->
             if (index < rating) {
-                imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.orange_dark))
+                val color = starColors.getOrElse(index){ R.color.grey }
+                imageView.setColorFilter(ContextCompat.getColor(requireContext(), color))
             } else {
                 imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.grey))
             }

@@ -71,6 +71,8 @@ dependencies {
 
     implementation ("com.github.devendroid:vectorchildfinder:1.0.0")
 
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+
 
 }
 
