@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_marginTop="-150dp"
+        android:layout_marginTop="-25dp"
         android:padding="24dp">
 
 
@@ -33,7 +33,7 @@
         <EditText
             android:id="@+id/name_id"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/bg_circle"
@@ -48,7 +48,7 @@
         <EditText
             android:id="@+id/lastname_id"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_circle"
             android:drawablePadding="5dp"
@@ -63,7 +63,7 @@
         <EditText
             android:id="@+id/username_id"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/bg_circle"
@@ -75,11 +75,45 @@
             android:textColorHint="@color/purple_dark"
             android:textSize="14sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_circle">
+
+
+            <ImageView
+                android:id="@+id/change_img_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/kwadrat"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                />
+
+            <TextView
+                android:id="@+id/add_photo_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:text="@string/add_photo"
+                android:gravity="center"
+                android:fontFamily="@font/afacad"
+                android:textColor="@color/purple_dark"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/email_id"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_circle"
             android:drawablePadding="5dp"
@@ -94,7 +128,7 @@
         <EditText
             android:id="@+id/passw_id"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_circle"
             android:drawablePadding="5dp"
@@ -110,7 +144,7 @@
         <EditText
             android:id="@+id/passw"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_circle"
             android:drawablePadding="5dp"
@@ -128,7 +162,7 @@
         <Button
             android:id="@+id/signupbutton_id"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:padding="5dp"
             android:layout_marginTop="25dp"
             android:backgroundTint="@color/orange_dark_dark"

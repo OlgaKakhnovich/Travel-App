@@ -46,7 +46,6 @@ class ViewTripFragment : Fragment() {
         dateFromTextView = view.findViewById(R.id.date_from_view)
         dateToTextView = view.findViewById(R.id.date_to_view)
         ratingTextView = view.findViewById(R.id.star_id_view)
-        profileImageView = view.findViewById(R.id.profil_image_view)
         tipsTextView = view.findViewById(R.id.list_tips_id)
         opinionTextView = view.findViewById(R.id.list_opinion_id)
 

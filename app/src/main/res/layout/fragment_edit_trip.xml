@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/add_trip_fragm"
+    android:id="@+id/edit_trip_fragm"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewTripFragment">
+    tools:context=".EditTripFragment">
 
-
-
-    <!-- Tło obrazka -->
-    <ImageButton
-        android:id="@+id/add_headerImage"
+    <FrameLayout
+        android:id="@+id/header_img"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:backgroundTint="@color/orange1"
-        android:src="@drawable/add"
-        android:scaleType="centerInside"
-    android:scaleX="3"
-    android:scaleY="3"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Tło obrazka -->
+        <ImageView
+            android:id="@+id/headerImage"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:backgroundTint="@color/orange1"
+            android:scaleType="centerInside"
+            android:scaleX="3"
+            android:scaleY="3" />
+
+        <!-- Przycisk w centrum -->
+        <ImageButton
+            android:id="@+id/edit_button"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/edit"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:background="@drawable/flag_transparent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
 
 
     <ImageButton
-        android:id="@+id/back2"
+        android:id="@+id/back5"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
@@ -36,18 +54,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:id="@+id/scrollView"
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_headerImage">
+        app:layout_constraintTop_toBottomOf="@+id/header_img">
 
         <!-- Dolna część z detalami i opiniami -->
         <LinearLayout
-            android:id="@+id/add_detailsContainer"
+            android:id="@+id/edit_detailsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient"
@@ -56,7 +74,7 @@
 
 
             <Button
-                android:id="@+id/button_add_photos"
+                android:id="@+id/button_add_photos2"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_gravity="center_vertical"
@@ -69,18 +87,48 @@
 
 
             <LinearLayout
-                android:id="@+id/view_photos"
+                android:id="@+id/view_photos2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <!-- Przykładowe miniaturki -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/listImage12"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginRight="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/samolot"
+                        app:shapeAppearanceOverlay="@style/roundImage" />
+
+                    <ImageButton
+                        android:id="@+id/deleteButton1"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.5"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage1"
+                    android:id="@+id/listImage22"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginRight="8dp"
@@ -88,8 +136,23 @@
                     android:src="@drawable/samolot"
                     app:shapeAppearanceOverlay="@style/roundImage" />
 
+                    <ImageButton
+                        android:id="@+id/deleteButton2"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.5"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage2"
+                    android:id="@+id/listImage32"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginRight="8dp"
@@ -97,34 +160,62 @@
                     android:src="@drawable/samolot"
                     app:shapeAppearanceOverlay="@style/roundImage" />
 
+                    <ImageButton
+                        android:id="@+id/deleteButton3"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.5"
+                        android:visibility="gone" />
 
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage3"
+                    android:id="@+id/listImage42"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginRight="8dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/samolot"
                     app:shapeAppearanceOverlay="@style/roundImage" />
+                    <ImageButton
+                        android:id="@+id/deleteButton4"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.5"
+                        android:visibility="gone" />
 
+                </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage4"
+                    android:id="@+id/listImage52"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/samolot"
                     app:shapeAppearanceOverlay="@style/roundImage" />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage5"
+                <ImageButton
+                    android:id="@+id/deleteButton5"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage" />
+                    android:src="@drawable/clear"
+                    app:shapeAppearanceOverlay="@style/roundImage"
+                    android:backgroundTint="@color/grey"
+                    android:alpha="0.5"
+                    android:visibility="gone" />
 
+            </RelativeLayout>
 
                 <!-- Dodaj więcej miniaturek w taki sam sposób -->
             </LinearLayout>
@@ -139,7 +230,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/add_country"
+                    android:id="@+id/edit_country"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
@@ -149,7 +240,7 @@
                     android:textSize="16sp" />
 
                 <com.hbb20.CountryCodePicker
-                    android:id="@+id/ccp_add"
+                    android:id="@+id/ccp_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/afacad"
@@ -167,7 +258,7 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/add_city"
+                    android:id="@+id/edit_city"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
@@ -178,14 +269,13 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -199,18 +289,15 @@
                         android:paddingRight="5dp"
                         android:text="@string/date_of_trip"
                         android:textColor="@color/purple_dark"
-                        android:lineSpacingMultiplier="0.7"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical">
+                        android:layout_height="wrap_content">
 
                         <Button
-                            android:id="@+id/add_date_from"
-                            android:layout_width="125dp"
+                            android:id="@+id/edit_date_from"
+                            android:layout_width="115dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/bg_circle"
@@ -227,16 +314,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/afacad"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:text="-"
                             android:textColor="@color/black"
-                            android:textSize="20sp" />
+                            android:textSize="17sp" />
 
                         <Button
-                            android:id="@+id/add_date_to"
-                            android:layout_width="125dp"
+                            android:id="@+id/edit_date_to"
+                            android:layout_width="115dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/bg_circle"
@@ -277,35 +364,35 @@
 
 
                     <ImageView
-                        android:id="@+id/star1"
+                        android:id="@+id/star11"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:src="@drawable/star"
                         app:tint="@color/grey" />
 
                     <ImageView
-                        android:id="@+id/star2"
+                        android:id="@+id/star21"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:src="@drawable/star"
                         app:tint="@color/grey" />
 
                     <ImageView
-                        android:id="@+id/star3"
+                        android:id="@+id/star31"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:src="@drawable/star"
                         app:tint="@color/grey" />
 
                     <ImageView
-                        android:id="@+id/star4"
+                        android:id="@+id/star41"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:src="@drawable/star"
                         app:tint="@color/grey" />
 
                     <ImageView
-                        android:id="@+id/star5"
+                        android:id="@+id/star51"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:src="@drawable/star"
@@ -317,7 +404,7 @@
 
 
             <EditText
-                android:id="@+id/add_opinion"
+                android:id="@+id/edit_opinion"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:background="@drawable/przycisk"
@@ -341,7 +428,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/add_tips"
+                android:id="@+id/edit_tips"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@drawable/przycisk"
@@ -356,7 +443,7 @@
 
 
             <Button
-                android:id="@+id/button_save"
+                android:id="@+id/button_save1"
                 android:layout_width="100dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
