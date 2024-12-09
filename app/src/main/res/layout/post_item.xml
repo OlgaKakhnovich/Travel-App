@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="3dp"
+    android:layout_marginHorizontal="3dp"
+    android:fontFamily="@font/afacad"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+
+            <ImageView
+                android:id="@+id/photo_who_post"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/kwadrat"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/change_img_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/afacad"
+                android:hint="@string/username"
+                android:textColor="@color/purple_dark"
+                android:textSize="15sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/post_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:hint="Miasto"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/post_country_comma"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:padding="0dp"
+                    android:text=","
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/post_country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:hint="Kraj"
+                    android:paddingLeft="6dp"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/date_from_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/afacad"
+                        android:hint="@string/date_from"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:id="@+id/dash_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/afacad"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="-"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+
+                    <TextView
+                        android:id="@+id/date_to_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/afacad"
+                        android:hint="@string/date_to"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+        </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <ImageButton
+                    android:id="@+id/saveforlaterButton1"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/save_outline1"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/white"
+                    />
+
+                <ImageButton
+                    android:id="@+id/saveforlaterButton2"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/save_filled"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/white"
+                    android:visibility="gone"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/headerImage"
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/samolot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="10dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/listImage13"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/grey" />
+
+                <ImageView
+                    android:id="@+id/listImage23"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/grey" />
+
+
+                <ImageView
+                    android:id="@+id/listImage33"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/grey" />
+
+
+                <ImageView
+                    android:id="@+id/listImage43"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/grey" />
+
+                <ImageView
+                    android:id="@+id/listImage53"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/grey" />
+
+                <ImageView
+                    android:id="@+id/listImage63"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/grey" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_margin="3dp">
+
+
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:src="@drawable/star" />
+
+                <TextView
+                    android:id="@+id/star_id_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/afacad"
+                    android:hint="4"
+                    android:paddingLeft="3dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/list_opinion_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/afacad"
+            android:padding="5dp"
+            android:hint="Bla bla bla blablablabla lallalalalallal lalalallallalalalallalal alallalallalal alalla jdkn klallsllalsll allalalallala lallalalallal babababbababa babababba a babbabab babababbaba."
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+</LinearLayout>
+
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

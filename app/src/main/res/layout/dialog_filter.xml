@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardElevation="8dp"
+    android:fontFamily="@font/afacad"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/wishCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/filter"
+            android:textColor="@color/purple_dark"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_height="2dp"
+            android:background="@color/orange2" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="7dp"
+            android:backgroundTint="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/filter_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/afacad"
+                android:text="@string/add_country"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/afacad"
+                app:ccp_defaultLanguage="POLISH"
+                app:ccp_showFullName="true"
+                app:ccp_showPhoneCode="false" />
+
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/filter_city"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/afacad"
+            android:hint="@string/add_city"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/filter_name"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/afacad"
+            android:hint="@string/username"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+
+        <Button
+            android:id="@+id/okbutton3"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/orange_dark_dark"
+            android:text="@string/ok"
+            android:fontFamily="@font/afacad"
+            android:textSize="20sp"
+            android:gravity="center" />
+
+
+
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -31,7 +31,7 @@
 
 
     <ImageButton
-        android:id="@+id/saveforlaterButton"
+        android:id="@+id/edit_trip_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"

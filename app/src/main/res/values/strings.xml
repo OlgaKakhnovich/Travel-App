@@ -74,6 +74,10 @@
 
     <string name="ok">Zapisz</string>
 
+    <string name="find">wyszukaj</string>
+    <string name="sortuj">Sortuj:</string>
+    <string name="filter">Filtruj</string>
+
 
     <string name="cities">Miasta</string>
     <string name="countries">Kraje</string>
