@@ -32,26 +32,27 @@ class SignInFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
 
-        emailEditText = view.findViewById(R.id.email)
-        passwordEditText = view.findViewById(R.id.passw)
-        loginButton = view.findViewById(R.id.logbutton)
+        val registrationButton: TextView = view.findViewById(R.id.signup)
 
-
-        loginButton.setOnClickListener {
-            performLogin()
-
-            val intent = Intent(activity, MenuActivity::class.java)
-            startActivity(intent)
-
-        }
-
-        val signUpTextView: TextView = view.findViewById(R.id.signup)
-        signUpTextView.setOnClickListener {
+        registrationButton.setOnClickListener {
             parentFragmentManager.commit {
                 replace(R.id.fragment_container, SignUpFragment())
                 addToBackStack(null)
             }
         }
+
+        emailEditText = view.findViewById(R.id.email)
+        passwordEditText = view.findViewById(R.id.passw)
+        loginButton = view.findViewById(R.id.logbutton)
+
+
+        loginButton.setOnClickListener(){
+            performLogin()
+        }
+
+
+
+
 
         return view
     }
@@ -59,24 +60,32 @@ class SignInFragment : Fragment() {
         val email = emailEditText.text.toString().trim()
         val password = passwordEditText.text.toString().trim()
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(requireContext(), "Wszystkie pola są wymagane", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val str="successgul"
-                    Toast.makeText(requireContext(), "Zalogowano pomyślnie", Toast.LENGTH_SHORT).show()
+                   navigateToHome()
                 } else {
-                    val str="failure"
-                    Toast.makeText(requireContext(), "Logowanie nie powiodło się. Zły login lub hasło.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Nie udało się zalogować. Zły e-mail lub hasło. Spróbuj ponownie.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Logowanie nie powiodło się. Spróbuj ponownie.", Toast.LENGTH_SHORT).show()
-            }
+        } else {
+            Toast.makeText(requireContext(), "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
+        }
     }
+
+
+
+    private fun navigateToHome() {
+        val intent = Intent(activity, MenuActivity::class.java)
+        startActivity(intent)
+    }
+
+
+
+
 
 }

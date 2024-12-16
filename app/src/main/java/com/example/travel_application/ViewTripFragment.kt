@@ -9,10 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.ByteArrayInputStream
 import java.util.Locale
@@ -26,9 +28,9 @@ class ViewTripFragment : Fragment() {
     private lateinit var dateFromTextView: TextView
     private lateinit var dateToTextView: TextView
     private lateinit var ratingTextView: TextView
-    private lateinit var profileImageView: ImageView
     private lateinit var tipsTextView: TextView
     private lateinit var opinionTextView: TextView
+    private lateinit var back: ImageButton
 
     private lateinit var tripId: String
     private lateinit var trip: Trip
@@ -48,13 +50,14 @@ class ViewTripFragment : Fragment() {
         ratingTextView = view.findViewById(R.id.star_id_view)
         tipsTextView = view.findViewById(R.id.list_tips_id)
         opinionTextView = view.findViewById(R.id.list_opinion_id)
+        back = view.findViewById(R.id.back)
+
 
         cityTextView.visibility = View.VISIBLE
         countryTextView.visibility = View.VISIBLE
         dateFromTextView.visibility = View.VISIBLE
         dateToTextView.visibility = View.VISIBLE
         ratingTextView.visibility = View.VISIBLE
-        profileImageView.visibility = View.VISIBLE
         tipsTextView.visibility = View.VISIBLE
         opinionTextView.visibility = View.VISIBLE
 
@@ -65,6 +68,14 @@ class ViewTripFragment : Fragment() {
         } else {
             Log.w("ViewTripFragment", "Trip ID is empty")
         }
+
+        back.setOnClickListener{
+            parentFragmentManager.commit {
+                replace(R.id.frame_container, ListTravelFragment())
+                addToBackStack(null)
+            }
+        }
+
 
         return view
     }
@@ -91,23 +102,24 @@ class ViewTripFragment : Fragment() {
 
     private fun getCountryNameFromCode(countryCode: String): String {
         val locale = Locale("", countryCode)
-        val polishLocale = Locale("pl");
+        val polishLocale = Locale("pl")
         return locale.getDisplayCountry(polishLocale)
     }
     private fun updateUI() {
 
 
-        cityTextView.text = trip.city ?: "Unknown city"
-        countryTextView.text = getCountryNameFromCode(trip.countryCode) ?: "Unknown country"
-        dateFromTextView.text = trip.dateFrom ?: "No date"
-        dateToTextView.text = trip.dateTo ?: "No date"
-        ratingTextView.text = trip.rating?.toString() ?: "No rating"
+        cityTextView.text = trip.city
+        countryTextView.text = getCountryNameFromCode(trip.countryCode)
+        dateFromTextView.text = trip.dateFrom
+        dateToTextView.text = trip.dateTo
+        ratingTextView.text = trip.rating.toString()
         tipsTextView.text = trip.tips ?: "No tips"
         opinionTextView.text = trip.opinion ?: "No opinion"
 
         trip.headerImage?.let {
             val headerBitmap = convertBase64ToBitmap(it)
             if (headerBitmap != null) {
+
                 val heightInPx = convertDpToPx(360f)
                 val widthInPx = ViewGroup.LayoutParams.MATCH_PARENT
 
@@ -134,10 +146,10 @@ class ViewTripFragment : Fragment() {
 
     private fun loadGalleryImages(galleryImagesBase64: List<String>) {
         val imageViews = listOf(
-            view?.findViewById<ImageView>(R.id.listImage1),
-            view?.findViewById<ImageView>(R.id.listImage2),
-            view?.findViewById<ImageView>(R.id.listImage3),
-            view?.findViewById<ImageView>(R.id.listImage4),
+            view?.findViewById(R.id.listImage1),
+            view?.findViewById(R.id.listImage2),
+            view?.findViewById(R.id.listImage3),
+            view?.findViewById(R.id.listImage4),
             view?.findViewById<ImageView>(R.id.listImage5)
         )
 

@@ -1,59 +1,148 @@
 package com.example.travel_application
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import com.example.travel_application.databinding.FragmentMapBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import org.json.JSONArray
+import org.osmdroid.api.IMapController
+import org.osmdroid.config.Configuration
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import java.net.HttpURLConnection
+import java.net.URL
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class MapFragment : Fragment(), MapListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MapFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MapFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var mMap: MapView
+    private lateinit var controller: IMapController
+    private lateinit var mMyLocationOverlay: MyLocationNewOverlay
+
+    private val firestore = FirebaseFirestore.getInstance()
+    private val firebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+        Configuration.getInstance().load(
+            requireContext(),
+            androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+        )
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false)
+    ): View {
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+
+        mMap = binding.osmmap
+        mMap.setTileSource(TileSourceFactory.MAPNIK)
+        mMap.setMultiTouchControls(true)
+        controller = mMap.controller
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
+        } else {
+            enableLocation()
+        }
+
+        loadPlaces()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MapFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MapFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun enableLocation() {
+        mMyLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(requireContext()), mMap)
+        mMyLocationOverlay.enableMyLocation()
+        mMyLocationOverlay.enableFollowLocation()
+        mMyLocationOverlay.isDrawAccuracyEnabled = true
+
+        mMyLocationOverlay.runOnFirstFix {
+            activity?.runOnUiThread {
+                val myLocation = mMyLocationOverlay.myLocation
+                if (myLocation != null) {
+                    controller.setZoom(4.0)
+                    controller.setCenter(myLocation)
                 }
             }
+        }
+
+        mMap.overlays.add(mMyLocationOverlay)
+        mMap.addMapListener(this)
+    }
+
+    override fun onScroll(event: ScrollEvent?): Boolean = true
+    override fun onZoom(event: ZoomEvent?): Boolean = true
+
+    override fun onPause() {
+        super.onPause()
+        mMyLocationOverlay.disableMyLocation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mMyLocationOverlay.enableMyLocation()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
+
+    private fun loadPlaces() {
+        val currentUser = firebaseAuth.currentUser
+        val userId = currentUser?.uid ?: return
+
+        firestore.collection("places")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val latitude = document.getDouble("latitude")
+                    val longitude = document.getDouble("longitude")
+                    val title = "${document.getString("city")}, ${document.getString("countryCode")}"
+
+                    if (latitude != null && longitude != null) {
+                        addMarker(latitude, longitude, title ?: "Miejsce")
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+            }
+    }
+
+
+    private fun addMarker(lat: Double, lon: Double, title: String) {
+        val marker = Marker(mMap)
+        marker.position = GeoPoint(lat, lon)
+        marker.title = title
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        mMap.overlays.add(marker)
     }
 }
