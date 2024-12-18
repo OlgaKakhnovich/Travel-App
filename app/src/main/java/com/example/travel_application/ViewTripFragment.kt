@@ -9,10 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +33,7 @@ class ViewTripFragment : Fragment() {
     private lateinit var tipsTextView: TextView
     private lateinit var opinionTextView: TextView
     private lateinit var back: ImageButton
+    private lateinit var editTripButton: ImageButton
 
     private lateinit var tripId: String
     private lateinit var trip: Trip
@@ -51,6 +54,7 @@ class ViewTripFragment : Fragment() {
         tipsTextView = view.findViewById(R.id.list_tips_id)
         opinionTextView = view.findViewById(R.id.list_opinion_id)
         back = view.findViewById(R.id.back)
+        editTripButton = view.findViewById(R.id.edit_trip_button)
 
 
         cityTextView.visibility = View.VISIBLE
@@ -74,6 +78,21 @@ class ViewTripFragment : Fragment() {
                 replace(R.id.frame_container, ListTravelFragment())
                 addToBackStack(null)
             }
+        }
+
+        editTripButton.setOnClickListener {
+            val fragment: Fragment = EditTripFragment()
+            val args = Bundle()
+            args.putString("tripId", tripId)
+
+            fragment.arguments=args
+
+            parentFragmentManager.commit {
+                replace(R.id.frame_container, fragment )
+                addToBackStack(null)
+            }
+
+
         }
 
 
@@ -113,8 +132,8 @@ class ViewTripFragment : Fragment() {
         dateFromTextView.text = trip.dateFrom
         dateToTextView.text = trip.dateTo
         ratingTextView.text = trip.rating.toString()
-        tipsTextView.text = trip.tips ?: "No tips"
-        opinionTextView.text = trip.opinion ?: "No opinion"
+        tipsTextView.text = trip.tips ?: ""
+        opinionTextView.text = trip.opinion ?: ""
 
         trip.headerImage?.let {
             val headerBitmap = convertBase64ToBitmap(it)

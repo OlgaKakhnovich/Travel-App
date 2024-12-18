@@ -255,7 +255,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/afacad"
-            android:hint="Bla bla bla blablablabla lallalalalallal lalalallallalalalallalal alallalallalal alalla jdkn klallsllalsll allalalallala lallalalallal babababbababa babababba a babbabab babababbaba."
+            android:hint=""
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -275,7 +275,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/afacad"
-            android:hint="Nie parkuj przy ul.Banacha 22"
+            android:hint=""
             android:textColor="@color/black"
             android:textSize="16sp" />
 
