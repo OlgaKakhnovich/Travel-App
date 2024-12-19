@@ -552,8 +552,7 @@ class AddTripFragment : Fragment() {
 
         override fun doInBackground(vararg params: Void?): List<Pair<Double, Double>>? {
             val query = "$city".replace(" ", "+")
-            val countryCode = countryCodeFromCountryName(country)
-            val url = "https://nominatim.openstreetmap.org/search?q=$query&countrycodes=$countryCode&format=json&addressdetails=1"
+            val url = "https://nominatim.openstreetmap.org/search?q=$query&countrycodes=$country&format=json&addressdetails=1"
 
             return try {
                 val connection = URL(url).openConnection() as HttpURLConnection
@@ -622,18 +621,17 @@ class AddTripFragment : Fragment() {
                     Toast.makeText(requireContext(), "Nie znaleziono lokalizacji", Toast.LENGTH_SHORT).show()
 
                 } else if (coordinates.size == 1) {
-                    // Jeśli tylko jedna lokalizacja, automatycznie ją wybierz
+
                     selectedCoordinates = coordinates[0]
                     val (latitude, longitude) = coordinates[0]
                     Toast.makeText(requireContext(), "Lokalizacja znaleziona: $latitude, $longitude", Toast.LENGTH_SHORT).show()
                 } else {
-                    // Jeśli wiele lokalizacji, pokaż mapę
+
                     showLocationSelectionMap(coordinates)
                 }
             }.execute()
         }
     }
-
 
 
 }

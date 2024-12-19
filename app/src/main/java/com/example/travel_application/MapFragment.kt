@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.travel_application.databinding.FragmentMapBinding
@@ -59,6 +60,7 @@ class MapFragment : Fragment(), MapListener {
         mMap.setMultiTouchControls(true)
         controller = mMap.controller
 
+
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -70,6 +72,17 @@ class MapFragment : Fragment(), MapListener {
         }
 
         loadPlaces()
+
+        val zoomInButton = binding.root.findViewById<Button>(R.id.zoom_in_button)
+        val zoomOutButton = binding.root.findViewById<Button>(R.id.zoom_out_button)
+
+        zoomInButton.setOnClickListener {
+            this.controller.zoomIn()
+        }
+
+        zoomOutButton.setOnClickListener {
+            this.controller.zoomOut()
+        }
 
         return binding.root
     }
@@ -144,6 +157,7 @@ class MapFragment : Fragment(), MapListener {
         marker.position = GeoPoint(lat, lon)
         marker.title = title
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+
 
         when (rating) {
             1 -> marker.icon = resources.getDrawable(R.drawable.pin1orange, null)
