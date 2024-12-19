@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.play.services.maps)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,8 +67,8 @@ dependencies {
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
 
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("com.github.bumptech.glide:glide:4.15.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.0")
 
     implementation("com.hbb20:ccp:2.5.0")
 
@@ -78,6 +79,9 @@ dependencies {
 
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
 
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.moshi:moshi:1.12.0")
+    implementation ("com.squareup.moshi:moshi-kotlin:1.12.0")
 
 }
 

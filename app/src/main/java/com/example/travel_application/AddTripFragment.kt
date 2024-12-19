@@ -26,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hbb20.CountryCodePicker
@@ -34,6 +35,13 @@ import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Calendar
+import java.util.Locale
+
+
+
+
+
+
 
 class AddTripFragment : Fragment() {
 
@@ -58,6 +66,7 @@ class AddTripFragment : Fragment() {
     private val maxPhotos = 5
     private lateinit var viewPhotos: LinearLayout
     private lateinit var photoViews: List<ImageView>
+    private var selectedCoordinates: Pair<Double, Double>? = null
 
 
     @SuppressLint("MissingInflatedId")
@@ -91,6 +100,7 @@ class AddTripFragment : Fragment() {
             view.findViewById(R.id.listImage4),
             view.findViewById(R.id.listImage5)
         )
+
 
 
 
@@ -142,10 +152,6 @@ class AddTripFragment : Fragment() {
 
         buttonSaveTrip.setOnClickListener {
             saveTripToFirestore()
-            parentFragmentManager.commit {
-                replace(R.id.frame_container, ProfilFragment())
-                addToBackStack(null)
-            }
 
         }
 
@@ -156,9 +162,28 @@ class AddTripFragment : Fragment() {
             }
         }
 
+        addCity.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+
+                fetchCoordinatesForCityAndCountry()
+            }
+        }
+
+
+        countryCodePicker.setOnCountryChangeListener {
+            fetchCoordinatesForCityAndCountry()
+        }
+
+
+
+
 
         return view
     }
+
+
+
+
 
     private fun showHeaderImageSelectionDialog() {
         val options = arrayOf("Wybierz z Galerii", "Zrób Zdjęcie")
@@ -207,8 +232,9 @@ class AddTripFragment : Fragment() {
         }
 
     private fun showGalleryImageSelectionDialog() {
-        if (galleryImageUris.size >= 10) {
-            Toast.makeText(requireContext(), "Możesz dodać maksymalnie 10 zdjęć", Toast.LENGTH_SHORT).show()
+
+        if (galleryImageUris.size >= 5) {
+            Toast.makeText(requireContext(), "Możesz dodać maksymalnie 5 zdjęć", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -224,6 +250,7 @@ class AddTripFragment : Fragment() {
         builder.show()
     }
 
+
     private fun selectMultipleImagesFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
@@ -238,29 +265,33 @@ class AddTripFragment : Fragment() {
                     if (data.clipData != null) {
                         val count = data.clipData!!.itemCount
                         for (i in 0 until count) {
-                            data.clipData!!.getItemAt(i).uri
-                            if (galleryImageUris.size < maxPhotos) {
-
+                            val uri = data.clipData!!.getItemAt(i).uri
+                            if (galleryImageUris.size < 5) {
+                                galleryImageUris.add(uri)
                                 updatePhotoViews()
+
                             } else {
                                 Toast.makeText(requireContext(), "Osiągnięto limit 5 zdjęć", Toast.LENGTH_SHORT).show()
                                 break
                             }
                         }
                     } else if (data.data != null) {
-                        data.data!!
-                        if (galleryImageUris.size < maxPhotos) {
-
+                        val uri = data.data!!
+                        if (galleryImageUris.size < 5) {
+                            galleryImageUris.add(uri)
                             updatePhotoViews()
+                            Toast.makeText(requireContext(), "Dodano zdjęcia do galerii", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(requireContext(), "Osiągnięto limit 5 zdjęć", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Przekroczono limit 5 zdjęć", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 updatePhotoViews()
-                Toast.makeText(requireContext(), "Dodano zdjęcia do galerii", Toast.LENGTH_SHORT).show()
+
             }
         }
+
+
 
 
     private fun takeGalleryPhoto() {
@@ -273,22 +304,25 @@ class AddTripFragment : Fragment() {
         }
     }
 
+
     private val takeGalleryPhotoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
                 val bitmap = result.data!!.extras?.get("data") as Bitmap
                 val uri = getImageUriFromBitmap(bitmap)
                 uri?.let {
-                    if (galleryImageUris.size < maxPhotos) {
+                    if (galleryImageUris.size < 5) {
                         galleryImageUris.add(it)
                         updatePhotoViews()
                         Toast.makeText(requireContext(), "Dodano zdjęcie do galerii", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(requireContext(), "Osiągnięto limit 5 zdjęć", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Przekroczono limit 5 zdjęć", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
+
+
 
 
     private fun getImageUriFromBitmap(bitmap: Bitmap): Uri? {
@@ -298,6 +332,7 @@ class AddTripFragment : Fragment() {
         return Uri.parse(path)
     }
 
+
     private val requestCameraPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -306,6 +341,49 @@ class AddTripFragment : Fragment() {
                 Toast.makeText(requireContext(), "Wymagana zgoda na użycie kamery", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+
+    private fun convertUriToBase64(uri: Uri): String? {
+        return try {
+            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun updatePhotoViews() {
+
+        photoViews.forEachIndexed { index, imageView ->
+            if (index < galleryImageUris.size) {
+                Glide.with(requireContext())
+                    .load(galleryImageUris[index])
+                    .into(imageView)
+                imageView.visibility = View.VISIBLE
+
+
+                imageView.setOnClickListener {
+                    galleryImageUris.removeAt(index)
+
+                    updatePhotoViews()
+                }
+            } else {
+                imageView.setImageDrawable(null)
+                imageView.visibility = View.GONE
+            }
+        }
+
+        buttonAddPhotos.visibility = if (galleryImageUris.size < 5) View.VISIBLE else View.GONE
+    }
+
+
+
+
+
 
     private fun showDatePickerDialog(callback: (String) -> Unit) {
         val calendar = Calendar.getInstance()
@@ -341,28 +419,74 @@ class AddTripFragment : Fragment() {
     }
 
     private fun saveTripToFirestore() {
-        val city = addCity.text.toString()
+        val city = addCity.text.toString().trim()
         val selectedCountryCodeName = countryCodePicker.selectedCountryNameCode
-        val opinion = addOpinion.text.toString()
-        val tips = addTips.text.toString()
+        val opinion = addOpinion.text.toString().trim()
+        val tips = addTips.text.toString().trim()
         val dateFrom = addDateFrom.text.toString()
         val dateTo = addDateTo.text.toString()
-        val userId = auth.currentUser?.uid ?: ""
+        val userId = auth.currentUser?.uid.orEmpty()
 
-        val headerImageBase64 = headerImageUri?.let { uri -> convertUriToBase64(uri) }
-        val galleryImagesBase64 = galleryImageUris.mapNotNull { convertUriToBase64(it) }
 
-        GetCoordinatesTask(city, selectedCountryCodeName) { coordinates ->
-            if (coordinates.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Nie znaleziono lokalizacji", Toast.LENGTH_SHORT).show()
-            } else if (coordinates.size == 1) {
-                val (latitude, longitude) = coordinates[0]
-                saveDataToFirestore(city, selectedCountryCodeName, opinion, tips, dateFrom, dateTo, userId, latitude, longitude, headerImageBase64, galleryImagesBase64)
+        if (city.isNotEmpty() && dateFrom.isNotEmpty() && dateTo.isNotEmpty() ) {
+
+
+            val headerImageBase64 = headerImageUri?.let { uri -> convertUriToBase64(uri) }
+            val galleryImagesBase64 = galleryImageUris.mapNotNull { convertUriToBase64(it) }
+
+
+            if (selectedCoordinates != null) {
+                val (latitude, longitude) = selectedCoordinates!!
+                saveDataToFirestore(
+                    city, selectedCountryCodeName, opinion, tips,
+                    dateFrom, dateTo, userId, latitude, longitude,
+                    headerImageBase64, galleryImagesBase64
+                )
             } else {
-                showLocationSelectionMap(coordinates, city, selectedCountryCodeName, opinion, tips, dateFrom, dateTo, userId, headerImageBase64, galleryImagesBase64)
+                GetCoordinatesTask(city, selectedCountryCodeName) { coordinates ->
+                    when {
+                        coordinates.isNullOrEmpty() -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "Nie znaleziono lokalizacji",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        coordinates.size == 1 -> {
+                            val (latitude, longitude) = coordinates[0]
+                            saveDataToFirestore(
+                                city, selectedCountryCodeName, opinion, tips,
+                                dateFrom, dateTo, userId, latitude, longitude,
+                                headerImageBase64, galleryImagesBase64
+                            )
+                        }
+
+                        else -> {
+                            showLocationSelectionMap(coordinates)
+                        }
+                    }
+                }.execute()
             }
-        }.execute()
+
+            parentFragmentManager.commit {
+                replace(R.id.frame_container, ProfilFragment())
+                addToBackStack(null)
+            }
+
+        }
+
+        else{  Toast.makeText(requireContext(), "Uzupełnij wymagane pola: kraj, miasto i data.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
     }
+
+
+
+
+
+
 
     private fun saveDataToFirestore(
         city: String, countryCode: String, opinion: String, tips: String,
@@ -393,6 +517,31 @@ class AddTripFragment : Fragment() {
             }
     }
 
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val R = 6371
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        return R * c
+    }
+
+    private fun countryCodeFromCountryName(country: String): String {
+        return try {
+            Locale.getISOCountries()
+                .map { isoCode -> Locale("", isoCode) }
+                .firstOrNull { locale -> locale.displayCountry.equals(country, ignoreCase = true) }
+                ?.country ?: ""
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
+
+
 
 
     private inner class GetCoordinatesTask(
@@ -402,8 +551,9 @@ class AddTripFragment : Fragment() {
     ) : AsyncTask<Void, Void, List<Pair<Double, Double>>?>() {
 
         override fun doInBackground(vararg params: Void?): List<Pair<Double, Double>>? {
-            val query = "$city,$country".replace(" ", "+")
-            val url = "https://nominatim.openstreetmap.org/search?q=$query&format=json&addressdetails=1"
+            val query = "$city".replace(" ", "+")
+            val countryCode = countryCodeFromCountryName(country)
+            val url = "https://nominatim.openstreetmap.org/search?q=$query&countrycodes=$countryCode&format=json&addressdetails=1"
 
             return try {
                 val connection = URL(url).openConnection() as HttpURLConnection
@@ -411,7 +561,7 @@ class AddTripFragment : Fragment() {
                 connection.setRequestProperty("User-Agent", "Travel-Application")
                 connection.connect()
 
-                if (connection.responseCode == 200) {
+                if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
                     val results = JSONArray(response)
                     val locations = mutableListOf<Pair<Double, Double>>()
@@ -423,7 +573,14 @@ class AddTripFragment : Fragment() {
                         locations.add(Pair(lat, lon))
                     }
 
-                    locations
+                    val uniqueLocations = mutableListOf<Pair<Double, Double>>()
+                    for (loc in locations) {
+                        if (uniqueLocations.none { calculateDistance(it.first, it.second, loc.first, loc.second) < 5 }) {
+                            uniqueLocations.add(loc)
+                        }
+                    }
+
+                    uniqueLocations
                 } else null
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -432,29 +589,17 @@ class AddTripFragment : Fragment() {
         }
 
         override fun onPostExecute(result: List<Pair<Double, Double>>?) {
+            super.onPostExecute(result)
             callback(result)
         }
     }
 
-    private fun showLocationSelectionMap(
-        locations: List<Pair<Double, Double>>,
-        city: String,
-        countryCode: String,
-        opinion: String,
-        tips: String,
-        dateFrom: String,
-        dateTo: String,
-        userId: String,
-        headerImageBase64: String?,
-        galleryImagesBase64: List<String>
-    ) {
+
+    private fun showLocationSelectionMap(locations: List<Pair<Double, Double>>) {
         val dialog = MapSelectionFragment.newInstance(locations)
         dialog.setOnLocationSelectedListener { lat, lon ->
-            saveDataToFirestore(
-                city, countryCode, opinion, tips,
-                dateFrom, dateTo, userId, lat, lon,
-                headerImageBase64, galleryImagesBase64
-            )
+            selectedCoordinates = Pair(lat, lon)
+            Toast.makeText(requireContext(), "Lokalizacja wybrana: $lat, $lon", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
         dialog.show(parentFragmentManager, "MapSelectionFragment")
@@ -465,37 +610,29 @@ class AddTripFragment : Fragment() {
 
 
 
-    private fun convertUriToBase64(uri: Uri): String? {
-        return try {
-            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
-            val outputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
+
+
+    private fun fetchCoordinatesForCityAndCountry() {
+        val city = addCity.text.toString().trim()
+        val country = countryCodePicker.selectedCountryNameCode
+
+        if (city.isNotEmpty() && country.isNotEmpty()) {
+            GetCoordinatesTask(city, country) { coordinates ->
+                if (coordinates.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Nie znaleziono lokalizacji", Toast.LENGTH_SHORT).show()
+
+                } else if (coordinates.size == 1) {
+                    // Jeśli tylko jedna lokalizacja, automatycznie ją wybierz
+                    selectedCoordinates = coordinates[0]
+                    val (latitude, longitude) = coordinates[0]
+                    Toast.makeText(requireContext(), "Lokalizacja znaleziona: $latitude, $longitude", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Jeśli wiele lokalizacji, pokaż mapę
+                    showLocationSelectionMap(coordinates)
+                }
+            }.execute()
         }
     }
-
-    private fun updatePhotoViews() {
-        photoViews.forEachIndexed { index, imageView ->
-            if (index < galleryImageUris.size) {
-                imageView.setImageURI(galleryImageUris[index])
-                val photoUri = galleryImageUris[index].toString()
-                Log.d("AddTripFragment", "Zdjęcie dodane: ${String(photoUri.toByteArray(), Charsets.UTF_8)}")
-
-                imageView.visibility = View.VISIBLE
-            } else {
-                imageView.setImageDrawable(null) // Clear the ImageView
-                imageView.visibility = View.GONE
-            }
-        }
-
-        // Hide the "Add Photos" button when max photos are reached
-        buttonAddPhotos.visibility = if (galleryImageUris.size >1) View.GONE else View.VISIBLE
-    }
-
-
 
 
 

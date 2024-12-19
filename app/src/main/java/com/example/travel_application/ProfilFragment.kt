@@ -3,7 +3,10 @@ package com.example.travel_application
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,6 +94,10 @@ class ProfilFragment : Fragment() {
         firebaseRepository.fetchCityCount { cities ->
             binding.countCity.text = cities.toString()
         }
+
+        getImageFromFirestore()
+
+
 
 
         //bez menu
@@ -256,6 +263,43 @@ class ProfilFragment : Fragment() {
         val bottomNavigationView = requireActivity().findViewById<View>(R.id.bottom_navigation)
         bottomNavigationView.visibility = View.VISIBLE
     }
+
+
+    private fun getImageFromFirestore() {
+        db.collection("user").document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val base64Image = document.getString("profileImage")
+                    if (!base64Image.isNullOrEmpty()) {
+
+                        val bitmap = decodeBase64ToBitmap(base64Image)
+                        if (bitmap != null) {
+
+                            binding.img.setImageBitmap(bitmap)
+                        } else {
+                            Toast.makeText(context, "Nie udało się przekonwertować obrazu", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(context, "Brak danych w Firestore", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(context, "Błąd pobierania obrazu: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun decodeBase64ToBitmap(base64String: String): Bitmap? {
+        return try {
+            val decodedString = Base64.decode(base64String, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     companion object {
 

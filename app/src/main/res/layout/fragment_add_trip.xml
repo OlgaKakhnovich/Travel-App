@@ -54,7 +54,71 @@
             android:orientation="vertical"
             android:padding="20dp">
 
+            <LinearLayout
+                android:id="@+id/view_photos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                >
 
+                <!-- Przykładowe miniaturki -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/listImage1"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginRight="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/samolot"
+                    app:shapeAppearanceOverlay="@style/roundImage"
+                    android:visibility="gone"/>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/listImage2"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginRight="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/samolot"
+                    app:shapeAppearanceOverlay="@style/roundImage"
+                    android:visibility="gone"/>
+
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/listImage3"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginRight="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/samolot"
+                    app:shapeAppearanceOverlay="@style/roundImage"
+                    android:visibility="gone"/>
+
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/listImage4"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginRight="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/samolot"
+                    app:shapeAppearanceOverlay="@style/roundImage"
+                    android:visibility="gone"/>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/listImage5"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/samolot"
+                    app:shapeAppearanceOverlay="@style/roundImage"
+                    android:visibility="gone"/>
+
+
+                <!-- Dodaj więcej miniaturek w taki sam sposób -->
+            </LinearLayout>
             <Button
                 android:id="@+id/button_add_photos"
                 android:layout_width="match_parent"
@@ -65,69 +129,11 @@
                 android:paddingRight="15dp"
                 android:text="@string/add_photos"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                />
 
 
-            <LinearLayout
-                android:id="@+id/view_photos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:visibility="gone">
 
-                <!-- Przykładowe miniaturki -->
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage1"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage" />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage2"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage" />
-
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage3"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage" />
-
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage4"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage" />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage5"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage" />
-
-
-                <!-- Dodaj więcej miniaturek w taki sam sposób -->
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
