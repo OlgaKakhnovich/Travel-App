@@ -126,9 +126,10 @@ class MapFragment : Fragment(), MapListener {
                     val latitude = document.getDouble("latitude")
                     val longitude = document.getDouble("longitude")
                     val title = "${document.getString("city")}, ${document.getString("countryCode")}"
+                    val rating = document.getDouble("rating")?.toInt() ?: 0
 
                     if (latitude != null && longitude != null) {
-                        addMarker(latitude, longitude, title ?: "Miejsce")
+                        addMarker(latitude, longitude, title ?: "Miejsce", rating)
                     }
                 }
             }
@@ -138,11 +139,22 @@ class MapFragment : Fragment(), MapListener {
     }
 
 
-    private fun addMarker(lat: Double, lon: Double, title: String) {
+    private fun addMarker(lat: Double, lon: Double, title: String, rating: Int) {
         val marker = Marker(mMap)
         marker.position = GeoPoint(lat, lon)
         marker.title = title
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+
+        when (rating) {
+            1 -> marker.icon = resources.getDrawable(R.drawable.pin1orange, null)
+            2 -> marker.icon = resources.getDrawable(R.drawable.pin2mediumorange, null)
+            3 -> marker.icon = resources.getDrawable(R.drawable.pin3lightorange, null)
+            4 -> marker.icon = resources.getDrawable(R.drawable.pin4yellow, null)
+            5 -> marker.icon = resources.getDrawable(R.drawable.pin5blue, null)
+            else -> marker.icon = resources.getDrawable(R.drawable.add_location_icon, null)
+        }
+
+
         mMap.overlays.add(marker)
     }
 }
