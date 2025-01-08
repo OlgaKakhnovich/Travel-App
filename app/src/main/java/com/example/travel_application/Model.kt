@@ -4,3 +4,18 @@ class Model(var documentId: String?=null, var countryName: String?=null, var cit
     constructor():this("", "", "")
 
 }
+
+data class Place(
+    val city: String = "",
+    val countryCode: String = "",
+    val dateFrom: String = "",
+    val dateTo: String = "",
+    val galleryImages: List<String> = emptyList(),
+    val headerImage: String? = null,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
+    val opinion: String = "",
+    val rating: Int = 0,
+    val tips: String = "",
+    val userId: String = ""
+)
