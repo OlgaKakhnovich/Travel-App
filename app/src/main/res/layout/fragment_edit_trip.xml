@@ -24,15 +24,15 @@
             android:layout_width="match_parent"
             android:layout_height="450dp"
             android:backgroundTint="@color/orange1"
-            android:scaleType="centerInside"
-            android:scaleX="3"
-            android:scaleY="3" />
+            android:scaleType="centerCrop"
+            android:scaleX="1.1"
+            android:scaleY="1.1" />
 
         <!-- Przycisk w centrum -->
         <ImageButton
             android:id="@+id/edit_button"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="450dp"
             android:src="@drawable/edit"
             android:scaleX="2"
             android:scaleY="2"
@@ -73,17 +73,6 @@
             android:padding="20dp">
 
 
-            <Button
-                android:id="@+id/button_add_photos2"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/afacad"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/add_photos"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
 
 
             <LinearLayout
@@ -91,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="5dp"
+                android:layout_marginVertical="5dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible">
@@ -109,16 +98,18 @@
                         android:layout_marginRight="8dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/samolot"
+                        android:visibility="gone"
                         app:shapeAppearanceOverlay="@style/roundImage" />
 
                     <ImageButton
-                        android:id="@+id/deleteButton1"
+                        android:id="@+id/deleteButton12"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:src="@drawable/clear"
                         app:shapeAppearanceOverlay="@style/roundImage"
                         android:backgroundTint="@color/grey"
-                        android:alpha="0.5"
+                        android:background="@drawable/bg_circle"
+                        android:alpha="0.7"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -134,16 +125,18 @@
                     android:layout_marginRight="8dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/samolot"
+                    android:visibility="gone"
                     app:shapeAppearanceOverlay="@style/roundImage" />
 
                     <ImageButton
-                        android:id="@+id/deleteButton2"
+                        android:id="@+id/deleteButton22"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:src="@drawable/clear"
+                        android:background="@drawable/bg_circle"
                         app:shapeAppearanceOverlay="@style/roundImage"
                         android:backgroundTint="@color/grey"
-                        android:alpha="0.5"
+                        android:alpha="0.7"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -157,17 +150,19 @@
                     android:layout_height="65dp"
                     android:layout_marginRight="8dp"
                     android:scaleType="centerCrop"
+                    android:visibility="gone"
                     android:src="@drawable/samolot"
                     app:shapeAppearanceOverlay="@style/roundImage" />
 
                     <ImageButton
-                        android:id="@+id/deleteButton3"
+                        android:id="@+id/deleteButton32"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:src="@drawable/clear"
+                        android:background="@drawable/bg_circle"
                         app:shapeAppearanceOverlay="@style/roundImage"
                         android:backgroundTint="@color/grey"
-                        android:alpha="0.5"
+                        android:alpha="0.7"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -181,16 +176,18 @@
                     android:layout_height="65dp"
                     android:layout_marginRight="8dp"
                     android:scaleType="centerCrop"
+                    android:visibility="gone"
                     android:src="@drawable/samolot"
                     app:shapeAppearanceOverlay="@style/roundImage" />
                     <ImageButton
-                        android:id="@+id/deleteButton4"
+                        android:id="@+id/deleteButton42"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:src="@drawable/clear"
+                        android:background="@drawable/bg_circle"
                         app:shapeAppearanceOverlay="@style/roundImage"
                         android:backgroundTint="@color/grey"
-                        android:alpha="0.5"
+                        android:alpha="0.7"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -198,27 +195,42 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage52"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/listImage52"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/samolot"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/roundImage" />
                 <ImageButton
-                    android:id="@+id/deleteButton5"
+                    android:id="@+id/deleteButton52"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:src="@drawable/clear"
+                    android:background="@drawable/bg_circle"
                     app:shapeAppearanceOverlay="@style/roundImage"
                     android:backgroundTint="@color/grey"
-                    android:alpha="0.5"
+                    android:alpha="0.7"
                     android:visibility="gone" />
 
             </RelativeLayout>
 
                 <!-- Dodaj więcej miniaturek w taki sam sposób -->
             </LinearLayout>
+
+            <Button
+                android:id="@+id/button_add_photos2"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/afacad"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/add_photos"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -462,7 +474,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/afacad"
-                android:text="Wstawiono, bo nie widno przyciska"
+                android:hint="Wstawiono, bo nie widać przycisku"
                 android:textColor="@color/black"
                 android:textSize="35sp"
                 android:textStyle="bold" />

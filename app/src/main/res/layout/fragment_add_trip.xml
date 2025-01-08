@@ -9,20 +9,32 @@
 
 
 
-    <!-- Tło obrazka -->
     <ImageButton
         android:id="@+id/add_headerImage"
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:backgroundTint="@color/orange1"
-        android:src="@drawable/add"
-        android:scaleType="centerInside"
-    android:scaleX="3"
-    android:scaleY="3"
+        android:scaleType="centerCrop"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/plus"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="225dp"
+        android:backgroundTint="@color/orange1"
+        android:scaleX="5"
+        android:scaleY="5"
+        android:src="@drawable/add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"/>
 
     <ImageButton
         android:id="@+id/back2"
@@ -59,66 +71,147 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="5dp"
+                android:layout_marginVertical="5dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 >
 
                 <!-- Przykładowe miniaturki -->
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage1"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage"
-                    android:visibility="gone"/>
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage2"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage"
-                    android:visibility="gone"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage3"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage"
-                    android:visibility="gone"/>
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/listImage1"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginRight="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/samolot"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/roundImage" />
 
+                    <ImageButton
+                        android:id="@+id/deleteButton1"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:background="@drawable/bg_circle"
+                        android:alpha="0.7"
+                        android:visibility="gone" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage4"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginRight="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage"
-                    android:visibility="gone"/>
+                </RelativeLayout>
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/listImage5"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/samolot"
-                    app:shapeAppearanceOverlay="@style/roundImage"
-                    android:visibility="gone"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/listImage2"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginRight="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/samolot"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/roundImage" />
 
+                    <ImageButton
+                        android:id="@+id/deleteButton2"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        android:background="@drawable/bg_circle"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.7"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/listImage3"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginRight="8dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        android:src="@drawable/samolot"
+                        app:shapeAppearanceOverlay="@style/roundImage" />
+
+                    <ImageButton
+                        android:id="@+id/deleteButton3"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        android:background="@drawable/bg_circle"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.7"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/listImage4"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_marginRight="8dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        android:src="@drawable/samolot"
+                        app:shapeAppearanceOverlay="@style/roundImage" />
+                    <ImageButton
+                        android:id="@+id/deleteButton4"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        android:background="@drawable/bg_circle"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.7"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/listImage5"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/samolot"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/roundImage" />
+                    <ImageButton
+                        android:id="@+id/deleteButton5"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/clear"
+                        android:background="@drawable/bg_circle"
+                        app:shapeAppearanceOverlay="@style/roundImage"
+                        android:backgroundTint="@color/grey"
+                        android:alpha="0.7"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
                 <!-- Dodaj więcej miniaturek w taki sam sposób -->
             </LinearLayout>
+
+
+
             <Button
                 android:id="@+id/button_add_photos"
                 android:layout_width="match_parent"
@@ -129,7 +222,7 @@
                 android:paddingRight="15dp"
                 android:text="@string/add_photos"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="17sp"
                 />
 
 
