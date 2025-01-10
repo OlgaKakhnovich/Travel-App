@@ -17,5 +17,12 @@ data class Place(
     val opinion: String = "",
     val rating: Int = 0,
     val tips: String = "",
-    val userId: String = ""
+    val userId: String = "",
+    var username: String = "",
+    var profileImage: String = ""
+)
+
+data class User(
+    val username: String = "",
+    val profileImage: String = ""
 )
