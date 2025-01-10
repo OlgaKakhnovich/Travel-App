@@ -1,7 +1,7 @@
 package com.example.travel_application
 
-class Model(var documentId: String?=null, var countryName: String?=null, var city: String="") {
-    constructor():this("", "", "")
+class Model(var documentId: String?=null, var countryName: String?=null, var city: String="", var latitude: Double, var longitude: Double) {
+    constructor():this("", "", "", 0.0, 0.0)
 
 }
 

@@ -68,6 +68,9 @@ class AddTripFragment : Fragment() {
     private lateinit var photoViews: List<ImageView>
     private var selectedCoordinates: Pair<Double, Double>? = null
 
+    var argLon: Double = 0.0
+    var argLat: Double =0.0
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -108,6 +111,8 @@ class AddTripFragment : Fragment() {
         if(args!=null){
             val country = args.getString("country")
             val city = args.getString("city")
+            argLon = args.getDouble("longitude");
+            argLat = args.getDouble("latitude");
 
             countryCodePicker.setCountryForNameCode(country)
             addCity.setText(city)
@@ -435,7 +440,14 @@ class AddTripFragment : Fragment() {
             val galleryImagesBase64 = galleryImageUris.mapNotNull { convertUriToBase64(it) }
 
 
-            if (selectedCoordinates != null) {
+            if(argLon!=0.0 && argLat!=0.0){
+                saveDataToFirestore(
+                    city, selectedCountryCodeName, opinion, tips,
+                    dateFrom, dateTo, userId, argLat, argLon,
+                    headerImageBase64, galleryImagesBase64
+                )
+            }
+            else if (selectedCoordinates != null) {
                 val (latitude, longitude) = selectedCoordinates!!
                 saveDataToFirestore(
                     city, selectedCountryCodeName, opinion, tips,
@@ -461,7 +473,6 @@ class AddTripFragment : Fragment() {
                                 headerImageBase64, galleryImagesBase64
                             )
                         }
-
                         else -> {
                             showLocationSelectionMap(coordinates)
                         }
@@ -481,12 +492,6 @@ class AddTripFragment : Fragment() {
         }
 
     }
-
-
-
-
-
-
 
     private fun saveDataToFirestore(
         city: String, countryCode: String, opinion: String, tips: String,

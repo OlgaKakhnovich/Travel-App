@@ -43,7 +43,7 @@
 
 
                 <ImageView
-                    android:id="@+id/change_img_button"
+                    android:id="@+id/change_img"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:scaleType="centerCrop"

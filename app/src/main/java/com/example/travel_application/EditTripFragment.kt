@@ -1,9 +1,18 @@
 package com.example.travel_application
 
 import Trip
+import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,8 +25,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
+import com.bumptech.glide.Glide
 import com.example.travel_application.databinding.FragmentEditTripBinding
 import com.example.travel_application.databinding.FragmentProfilBinding
 import com.google.firebase.Firebase
@@ -27,6 +38,7 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.hbb20.CountryCodePicker
 import org.json.JSONArray
+import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Calendar
@@ -55,6 +67,19 @@ class EditTripFragment : Fragment() {
     private lateinit var trip: Trip
 
 
+    private var selectedCoordinates: Pair<Double, Double>? = null
+    private var headerImageUri: Uri? = null
+    private lateinit var changeHeaderImage: ImageView
+    private val IMAGE_PICK_CODE = 1000
+
+    private lateinit var galleryLayout: LinearLayout
+    private val maxPhotos = 5
+    private lateinit var photoViews: List<ImageView>
+    private val galleryImageUris = mutableListOf<Uri>()
+    private lateinit var buttonAddPhotos: Button
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -74,7 +99,27 @@ class EditTripFragment : Fragment() {
         countryCodePicker = binding.ccpEdit
         saveBtn = binding.buttonSave1
         back = binding.back5
+        buttonAddPhotos = binding.buttonAddPhotos2
+
+
+        galleryLayout = binding.viewPhotos2
+
+        photoViews = listOf(
+            binding.listImage12,
+            binding.listImage22,
+            binding.listImage32,
+            binding.listImage42,
+            binding.listImage52
+        )
+
+        changeHeaderImage = binding.headerImage
         db = FirebaseFirestore.getInstance()
+
+        changeHeaderImage.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            intent.type = "image/*"
+            startActivityForResult(intent, IMAGE_PICK_CODE)
+        }
 
         starViews = listOf(
             binding.star11,
@@ -89,6 +134,12 @@ class EditTripFragment : Fragment() {
                 editRating=index+1
                 updateStars(editRating)
             }
+        }
+
+        buttonAddPhotos.setOnClickListener {
+        if(galleryImageUris.size<maxPhotos){
+            showGalleryImageSelectionDialog()
+        }
         }
 
         back.setOnClickListener{
@@ -129,7 +180,185 @@ class EditTripFragment : Fragment() {
             Log.w("ViewTripFragment", "Trip ID is empty")
         }
 
+        getImageFromFirestore()
+
         return binding.root
+    }
+
+    private fun showGalleryImageSelectionDialog() {
+        if(galleryImageUris.size >= 5){
+            Toast.makeText(requireContext(), "Możesz dodać maksymalnie 5 zdjęć", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val options = arrayOf("Wybierz z Galerii", "Zrób Zdjęcie")
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Dodaj Zdjęcia do Galerii")
+        builder.setItems(options) { _, which ->
+            when (which) {
+                0 -> selectMultipleImagesFromGallery()
+                1 -> takeGalleryPhoto()
+            }
+        }
+        builder.show()
+    }
+
+    private fun selectMultipleImagesFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        selectGalleryImageLauncher.launch(intent)
+    }
+
+    private val selectGalleryImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                result.data?.let { data ->
+                    if (data.clipData != null) {
+                        val count = data.clipData!!.itemCount
+                        for (i in 0 until count) {
+                            val uri = data.clipData!!.getItemAt(i).uri
+                            if (galleryImageUris.size < 5) {
+                                galleryImageUris.add(uri)
+                                updatePhotoViews()
+
+                            } else {
+                                Toast.makeText(requireContext(), "Osiągnięto limit 5 zdjęć", Toast.LENGTH_SHORT).show()
+                                break
+                            }
+                        }
+                    } else if (data.data != null) {
+                        val uri = data.data!!
+                        if (galleryImageUris.size < 5) {
+                            galleryImageUris.add(uri)
+                            updatePhotoViews()
+                            Toast.makeText(requireContext(), "Dodano zdjęcia do galerii", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(requireContext(), "Przekroczono limit 5 zdjęć", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                updatePhotoViews()
+
+            }
+        }
+
+    private fun takeGalleryPhoto() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED) {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takeGalleryPhotoLauncher.launch(intent)
+        } else {
+            requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private val requestCameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                // Repeat action
+            } else {
+                Toast.makeText(requireContext(), "Wymagana zgoda na użycie kamery", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+    private val takeGalleryPhotoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val bitmap = result.data!!.extras?.get("data") as Bitmap
+                val uri = getImageUriFromBitmap(bitmap)
+                uri?.let {
+                    if (galleryImageUris.size < 5) {
+                        galleryImageUris.add(it)
+                        updatePhotoViews()
+                        Toast.makeText(requireContext(), "Dodano zdjęcie do galerii", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Przekroczono limit 5 zdjęć", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+
+    private fun updatePhotoViews() {
+
+        photoViews.forEachIndexed { index, imageView ->
+            if (index < galleryImageUris.size) {
+                Glide.with(requireContext())
+                    .load(galleryImageUris[index])
+                    .into(imageView)
+                imageView.visibility = View.VISIBLE
+
+
+                imageView.setOnClickListener {
+                    galleryImageUris.removeAt(index)
+
+                    updatePhotoViews()
+                }
+            } else {
+                imageView.setImageDrawable(null)
+                imageView.visibility = View.GONE
+            }
+        }
+
+        buttonAddPhotos.visibility = if (galleryImageUris.size < 5) View.VISIBLE else View.GONE
+    }
+
+
+    private fun decodeBase64ToBitmap(base64String: String): Bitmap? {
+        return try {
+            val decodedString = Base64.decode(base64String, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun getImageUriFromBitmap(bitmap: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(requireContext().contentResolver, bitmap, "TempImage", null)
+        return Uri.parse(path)
+    }
+
+    private var cachedProfileImage: Bitmap? = null
+    private fun getImageFromFirestore() {
+
+        if(cachedProfileImage!=null){
+            binding.headerImage.setImageBitmap(cachedProfileImage)
+            return
+        }
+
+        db.collection("places").document(tripId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val base64Image = document.getString("headerImage")
+                    if (!base64Image.isNullOrEmpty()) {
+                        cachedProfileImage = decodeBase64ToBitmap(base64Image)
+                        cachedProfileImage?.let {
+                            binding.headerImage.setImageBitmap(it)
+                        }?: run{
+                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                        }
+                        /*
+                                                val bitmap = decodeBase64ToBitmap(base64Image)
+                                                if (bitmap != null) {
+
+                                                    binding.changeImg.setImageBitmap(bitmap)
+                                                } else {
+                                                    Toast.makeText(context, "Nie udało się przekonwertować obrazu", Toast.LENGTH_SHORT).show()
+                                                }*/
+                    }
+                } else {
+                    Toast.makeText(context, "Brak danych w Firestore", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(context, "Błąd pobierania obrazu: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun updateDataInFirebase() {
@@ -140,18 +369,57 @@ class EditTripFragment : Fragment() {
         val dateFrom = editDateFrom.text.toString()
         val dateTo=editDateTo.text.toString()
 
+        if(city.isNotEmpty() && dateFrom.isNotEmpty() && dateTo.isNotEmpty() && !selectedCountryCodeName.isNullOrEmpty()) {
 
-        GetCoordinatesTask(city, selectedCountryCodeName) { coordinates ->
-            if (coordinates.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Nie znaleziono lokalizacji", Toast.LENGTH_SHORT).show()
-            } else if (coordinates.size == 1) {
-                val (latitude, longitude) = coordinates[0]
-                updateDate(city, selectedCountryCodeName, opinion, tips, dateFrom, dateTo, latitude, longitude)
+
+            if (selectedCoordinates != null) {
+                val (latitude, longitude) = selectedCoordinates!!
+                updateDate(
+                    city,
+                    selectedCountryCodeName,
+                    opinion,
+                    tips,
+                    dateFrom,
+                    dateTo,
+                    latitude,
+                    longitude,
+
+                )
             } else {
-                showLocationSelectionMap(coordinates, city, selectedCountryCodeName, opinion, tips, dateFrom, dateTo)
-            }
-        }.execute()
+                GetCoordinatesTask(city, selectedCountryCodeName) { coordinates ->
+                    if (coordinates.isNullOrEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Nie znaleziono lokalizacji",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else if (coordinates.size == 1) {
+                        val (latitude, longitude) = coordinates[0]
+                        updateDate(
+                            city,
+                            selectedCountryCodeName,
+                            opinion,
+                            tips,
+                            dateFrom,
+                            dateTo,
+                            latitude,
+                            longitude,
 
+                        )
+                    } else {
+                        showLocationSelectionMap(
+                            coordinates,
+                            city,
+                            selectedCountryCodeName,
+                            opinion,
+                            tips,
+                            dateFrom,
+                            dateTo
+                        )
+                    }
+                }.execute()
+            }
+        }
 
     }
 
@@ -170,8 +438,17 @@ class EditTripFragment : Fragment() {
             "dateTo" to dateTo,
             "rating" to editRating,
             "latitude" to latitude,
-            "longitude" to longitude
+            "longitude" to longitude,
         )
+
+        val existingImage = trip.headerImage
+        if(headerImageUri!=null){
+            val encodedImage = encodeImageToBase64(headerImageUri!!)
+            tripData["headerImage"] = encodedImage
+        }
+        else if(!existingImage.isNullOrEmpty()){
+            tripData["headerImage"] =existingImage
+        }
 
         db.collection("places").document(tripId)
             .update(tripData as Map<String, Any>)
@@ -181,6 +458,20 @@ class EditTripFragment : Fragment() {
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Nie udalo sie zmienic danych", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun encodeImageToBase64(imageUri: Uri): String {
+        return try {
+            val bitmap =
+                MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            Base64.encodeToString(byteArray, Base64.DEFAULT)
+        }catch (e:Exception){
+            e.printStackTrace()
+            ""
+        }
     }
 
 
@@ -233,13 +524,14 @@ class EditTripFragment : Fragment() {
         opinion: String,
         tips: String,
         dateFrom: String,
-        dateTo: String,
+        dateTo: String
     ) {
         val dialog = MapSelectionFragment.newInstance(locations)
         dialog.setOnLocationSelectedListener { lat, lon ->
+            selectedCoordinates = Pair(lat, lon)
             updateDate(
                 city, countryCode, opinion, tips,
-                dateFrom, dateTo, lat, lon,
+                dateFrom, dateTo, lat, lon
             )
             dialog.dismiss()
         }
@@ -300,6 +592,21 @@ class EditTripFragment : Fragment() {
             }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
+            headerImageUri = data?.data
+            headerImageUri?.let { uri ->
+                // Set the image to the ImageView
+                changeHeaderImage.setImageURI(uri)
+            }
+        }
+    }
+
+
+
+
     private fun updateFragment() {
         editTips.setText(trip.tips ?: "")
         editOpinion.setText(trip.opinion ?: "")
@@ -307,13 +614,34 @@ class EditTripFragment : Fragment() {
         countryCodePicker.setCountryForNameCode(trip.countryCode)
         editDateTo.text = trip.dateTo
         editDateFrom.text = trip.dateFrom
-
         editRating = trip.rating.toInt()
         updateStars(editRating)
 
+        if(!!trip.galleryImages.isNullOrEmpty()){
+            updatePhotoViews()
+        }
+
+        loadGalleryImages(trip.galleryImages ?: listOf())
     }
 
-    companion object {
+    private fun loadGalleryImages(strings: List<String>) {
+        val imageViews = listOf(
+            binding.listImage12,
+            binding.listImage22,
+            binding.listImage32,
+            binding.listImage42,
+            binding.listImage52
+        )
+
+        for(i in strings.indices){
+            if(i<imageViews.size){
+                val bitmap = decodeBase64ToBitmap(strings[i])
+                bitmap?.let {
+                    imageViews[i]?.setImageBitmap(bitmap)
+                }
+            }else{break}
+        }
 
     }
+
 }

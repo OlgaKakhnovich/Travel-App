@@ -53,6 +53,8 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
             val args = Bundle()
             args.putString("country", currentItem.countryName)
             args.putString("city", currentItem.city)
+            args.putDouble("longitude", currentItem.longitude)
+            args.putDouble("latitude", currentItem.latitude)
             fragment.arguments = args
 
             val activity = holder.itemView.context as AppCompatActivity
@@ -61,6 +63,8 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
                 .addToBackStack(null)
                 .commit()
         }
+
+        deleteItemFromDatabase(currentItem.documentId!!)
 
     }
 
