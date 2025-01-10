@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travel_application.Place
 import com.example.travel_application.R
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class PlaceAdapter(private val places: List<Place>) : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {
 
@@ -26,7 +27,25 @@ class PlaceAdapter(private val places: List<Place>) : RecyclerView.Adapter<Place
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        holder.bind(places[position])
+        val place = places[position]
+
+        val db = FirebaseFirestore.getInstance()
+        place.userId.let { userId ->
+            db.collection("user").document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        place.username = document.getString("username").toString()
+                        place.profileImage = document.getString("profileImage").toString()
+
+
+                        holder.bind(place)
+                    }
+                }
+                .addOnFailureListener {
+
+                    holder.bind(place)
+                }
+        }
     }
 
     override fun getItemCount(): Int = places.size
@@ -40,7 +59,11 @@ fun bindPlaceData(place: Place, view: View) {
     val opinionTextView = view.findViewById<TextView>(R.id.list_opinion_id)
     val ratingTextView = view.findViewById<TextView>(R.id.star_id_view)
     val headerImageView = view.findViewById<ImageView>(R.id.headerImage)
+    val profileImageView = view.findViewById<ImageView>(R.id.photo_who_post)
+    val usernameTextView = view.findViewById<TextView>(R.id.change_img_text)
 
+
+    usernameTextView.text = place.username
     cityTextView.text = place.city
     countryTextView.text = place.countryCode
     dateFromTextView.text = place.dateFrom
@@ -48,25 +71,29 @@ fun bindPlaceData(place: Place, view: View) {
     opinionTextView.text = place.opinion
     ratingTextView.text = place.rating.toString()
 
+
+    place.profileImage.let { base64Image ->
+        val bitmap = base64ToBitmap(base64Image)
+        bitmap?.let { profileImageView.setImageBitmap(it) }
+    }
+
     place.headerImage?.let { base64Image ->
         val bitmap = base64ToBitmap(base64Image)
         bitmap?.let { headerImageView.setImageBitmap(it) }
     }
 
     val galleryImageViews = listOf(
-        view.findViewById<ShapeableImageView>(R.id.listImage1),
-        view.findViewById<ShapeableImageView>(R.id.listImage2),
-        view.findViewById<ShapeableImageView>(R.id.listImage3),
-        view.findViewById<ShapeableImageView>(R.id.listImage4),
-        view.findViewById<ShapeableImageView>(R.id.listImage5),
+        view.findViewById(R.id.listImage1),
+        view.findViewById(R.id.listImage2),
+        view.findViewById(R.id.listImage3),
+        view.findViewById(R.id.listImage4),
+        view.findViewById(R.id.listImage5),
         view.findViewById<ShapeableImageView>(R.id.listImage6)
     )
 
     val allImages = mutableListOf<String>()
     place.headerImage?.let { allImages.add(it) }
     allImages.addAll(place.galleryImages)
-
-
 
     galleryImageViews.forEachIndexed { index, imageView ->
         if (index < allImages.size) {
@@ -75,7 +102,6 @@ fun bindPlaceData(place: Place, view: View) {
             bitmap?.let {
                 imageView.setImageBitmap(it)
                 imageView.visibility = View.VISIBLE
-
 
                 imageView.setOnClickListener {
                     val drawable = imageView.drawable
@@ -90,7 +116,6 @@ fun bindPlaceData(place: Place, view: View) {
         }
     }
 }
-
 
 
 fun base64ToBitmap(base64Str: String): Bitmap? {

@@ -433,7 +433,7 @@ class AddTripFragment : Fragment() {
         val userId = auth.currentUser?.uid.orEmpty()
 
 
-        if (city.isNotEmpty() && dateFrom.isNotEmpty() && dateTo.isNotEmpty() ) {
+        if (city.isNotEmpty() && dateFrom.isNotEmpty() && dateTo.isNotEmpty() && selectedRating != 0) {
 
 
             val headerImageBase64 = headerImageUri?.let { uri -> convertUriToBase64(uri) }
@@ -487,7 +487,7 @@ class AddTripFragment : Fragment() {
 
         }
 
-        else{  Toast.makeText(requireContext(), "Uzupełnij wymagane pola: kraj, miasto i data.", Toast.LENGTH_SHORT).show()
+        else{  Toast.makeText(requireContext(), "Uzupełnij wymagane pola: kraj, miasto, data i ocena.", Toast.LENGTH_SHORT).show()
             return
         }
 
