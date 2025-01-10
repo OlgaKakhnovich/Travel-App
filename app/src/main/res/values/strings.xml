@@ -81,6 +81,7 @@
 
     <string name="cities">Miasta</string>
     <string name="countries">Kraje</string>
+    <string name="date">Data</string>
 
 
 </resources>
