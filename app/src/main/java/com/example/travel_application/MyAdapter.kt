@@ -64,8 +64,6 @@ class MyAdapter(private val dataList: ArrayList<Model>): RecyclerView.Adapter<My
                 .commit()
         }
 
-        deleteItemFromDatabase(currentItem.documentId!!)
-
     }
 
     private fun deleteItemFromDatabase(documentId: String) {

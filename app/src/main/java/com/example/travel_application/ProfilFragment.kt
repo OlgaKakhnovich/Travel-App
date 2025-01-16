@@ -320,7 +320,7 @@ class ProfilFragment : Fragment() {
             "longitude" to longitude
         )
 
-        wishRef.document().set(wishMap)
+        wishRef.add(wishMap)
             .addOnSuccessListener {
                 Toast.makeText(
                     requireContext(),

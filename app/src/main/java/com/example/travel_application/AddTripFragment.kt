@@ -498,8 +498,11 @@ class AddTripFragment : Fragment() {
         dateFrom: String, dateTo: String, userId: String, latitude: Double, longitude: Double,
         headerImageBase64: String?, galleryImagesBase64: List<String>
     ) {
+
+        val cityToLowerCase = city.toLowerCase()
         val tripData = hashMapOf(
             "city" to city,
+            "cityToLowerCase" to cityToLowerCase,
             "countryCode" to countryCode,
             "opinion" to opinion,
             "tips" to tips,
@@ -614,8 +617,6 @@ class AddTripFragment : Fragment() {
 
 
 
-
-
     private fun fetchCoordinatesForCityAndCountry() {
         val city = addCity.text.toString().trim()
         val country = countryCodePicker.selectedCountryNameCode
@@ -637,6 +638,8 @@ class AddTripFragment : Fragment() {
             }.execute()
         }
     }
+
+
 
 
 }

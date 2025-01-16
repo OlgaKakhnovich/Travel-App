@@ -2,16 +2,21 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travel_application.Place
 import com.example.travel_application.R
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class PlaceAdapter(private val places: List<Place>) : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {
 
@@ -20,6 +25,7 @@ class PlaceAdapter(private val places: List<Place>) : RecyclerView.Adapter<Place
             bindPlaceData(place, itemView)
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
@@ -36,7 +42,6 @@ class PlaceAdapter(private val places: List<Place>) : RecyclerView.Adapter<Place
                     if (document.exists()) {
                         place.username = document.getString("username").toString()
                         place.profileImage = document.getString("profileImage").toString()
-
 
                         holder.bind(place)
                     }
@@ -61,6 +66,19 @@ fun bindPlaceData(place: Place, view: View) {
     val headerImageView = view.findViewById<ImageView>(R.id.headerImage)
     val profileImageView = view.findViewById<ImageView>(R.id.photo_who_post)
     val usernameTextView = view.findViewById<TextView>(R.id.change_img_text)
+    
+    val saveToWish = view.findViewById<ImageButton>(R.id.saveforlaterButton1)
+    val savedWish = view.findViewById<ImageButton>(R.id.saveforlaterButton2)
+
+    if(place.isSaved){
+        savedWish.visibility=View.VISIBLE
+        saveToWish.isEnabled = false
+    }
+    
+    saveToWish.setOnClickListener{
+        saveDataToWish(place.city, place.countryCode, place.latitude, place.longitude, savedWish, saveToWish, place)
+        
+    }
 
 
     usernameTextView.text = place.username
@@ -115,6 +133,37 @@ fun bindPlaceData(place: Place, view: View) {
             imageView.visibility = View.GONE
         }
     }
+}
+
+fun saveDataToWish(
+    city: String,
+    countryCode: String,
+    latitude: Double,
+    longitude: Double,
+    savedWish: ImageButton,
+    saveToWish: ImageButton,
+    place: Place
+) {
+     val userId = FirebaseAuth.getInstance().currentUser!!.uid
+     var db = Firebase.firestore
+    val wishRef = db.collection("user").document(userId).collection("wish")
+    val wishMap = hashMapOf(
+        "city" to city,
+        "countryName" to countryCode,
+        "latitude" to latitude,
+        "longitude" to longitude
+    )
+
+    wishRef.add(wishMap)
+        .addOnSuccessListener {
+            savedWish.visibility = View.VISIBLE
+            saveToWish.isEnabled = false
+            place.isSaved=true
+        }
+        .addOnFailureListener { exception ->
+            Log.e("", exception.toString())
+        }
+
 }
 
 

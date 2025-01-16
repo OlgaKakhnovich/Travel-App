@@ -1,6 +1,8 @@
 package com.example.travel_application
 
 import Trip
+import android.content.ContentValues
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -38,6 +40,7 @@ class ViewTripFragment : Fragment() {
     private lateinit var tripId: String
     private lateinit var trip: Trip
 
+    private lateinit var deleteTrip: ImageButton
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -95,8 +98,35 @@ class ViewTripFragment : Fragment() {
 
         }
 
+        deleteTrip = view.findViewById(R.id.delete_trip_button)
+
+        deleteTrip.setOnClickListener{
+            val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(deleteTrip.context)
+            alertDialogBuilder.setTitle("Usunąć podróż")
+            alertDialogBuilder.setMessage("Czy pewno chcesz usunąć tą podróż?")
+            alertDialogBuilder.setPositiveButton("Tak"){ dialogInterface: DialogInterface, i: Int ->
+                deleteItemFromDatabase()
+                dialogInterface.dismiss()
+            }
+            alertDialogBuilder.setNegativeButton("Nie"){ dialogInterface: DialogInterface, i:Int ->
+                dialogInterface.dismiss()
+            }
+            alertDialogBuilder.show()
+        }
+
 
         return view
+    }
+
+    private fun deleteItemFromDatabase() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("places").document(tripId).delete()
+            .addOnSuccessListener {
+                Log.w(ContentValues.TAG,"Element został usunięty")
+            }
+            .addOnFailureListener { e->
+                Log.w(ContentValues.TAG,"Błąd w usunięciu elementa", e)
+            }
     }
 
     private fun fetchTripDataFromFirestore() {

@@ -19,7 +19,8 @@ data class Place(
     val tips: String = "",
     val userId: String = "",
     var username: String = "",
-    var profileImage: String = ""
+    var profileImage: String = "",
+    var isSaved: Boolean = false
 )
 
 data class User(
