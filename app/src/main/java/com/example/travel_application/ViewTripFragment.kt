@@ -123,6 +123,13 @@ class ViewTripFragment : Fragment() {
         db.collection("places").document(tripId).delete()
             .addOnSuccessListener {
                 Log.w(ContentValues.TAG,"Element został usunięty")
+                parentFragmentManager.commit {
+                    replace(
+                        R.id.frame_container,
+                        ListTravelFragment()
+                    )
+                    addToBackStack(null)
+                }
             }
             .addOnFailureListener { e->
                 Log.w(ContentValues.TAG,"Błąd w usunięciu elementa", e)
@@ -168,8 +175,7 @@ class ViewTripFragment : Fragment() {
         trip.headerImage?.let {
             val headerBitmap = convertBase64ToBitmap(it)
             if (headerBitmap != null) {
-
-                val heightInPx = convertDpToPx(360f)
+                val heightInPx = convertDpToPx(400f)
                 val widthInPx = ViewGroup.LayoutParams.MATCH_PARENT
 
                 headerImageView.layoutParams.height = heightInPx
@@ -219,4 +225,7 @@ class ViewTripFragment : Fragment() {
         val density = resources.displayMetrics.density
         return (dp * density).toInt()
     }
+
+
+
 }

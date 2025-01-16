@@ -282,28 +282,38 @@ class EditTripFragment : Fragment() {
 
 
     private fun updatePhotoViews() {
-
         photoViews.forEachIndexed { index, imageView ->
+            val deleteButtonId = resources.getIdentifier("deleteButton${(index + 1) * 10 + 2}", "id", requireContext().packageName)
+            val deleteButton = view?.findViewById<ImageButton>(deleteButtonId)
+
             if (index < galleryImageUris.size) {
                 Glide.with(requireContext())
                     .load(galleryImageUris[index])
                     .into(imageView)
                 imageView.visibility = View.VISIBLE
 
+                deleteButton?.visibility = View.GONE
 
                 imageView.setOnClickListener {
-                    galleryImageUris.removeAt(index)
+                    deleteButton?.visibility = View.VISIBLE
+                }
 
+                deleteButton?.setOnClickListener {
+                    galleryImageUris.removeAt(index)
                     updatePhotoViews()
                 }
             } else {
                 imageView.setImageDrawable(null)
                 imageView.visibility = View.GONE
+                deleteButton?.visibility = View.GONE
             }
         }
 
-        buttonAddPhotos.visibility = if (galleryImageUris.size < 5) View.VISIBLE else View.GONE
+        buttonAddPhotos.visibility = if (galleryImageUris.size < maxPhotos) View.VISIBLE else View.GONE
     }
+
+
+
 
 
     private fun decodeBase64ToBitmap(base64String: String): Bitmap? {
@@ -448,6 +458,11 @@ class EditTripFragment : Fragment() {
         }
         else if(!existingImage.isNullOrEmpty()){
             tripData["headerImage"] =existingImage
+        }
+
+        if (galleryImageUris.isNotEmpty()) {
+            val galleryImagesBase64: List<String> = galleryImageUris.mapNotNull { convertUriToBase64(it) }
+          // tripData["galleryImages"] = galleryImagesBase64
         }
 
         db.collection("places").document(tripId)
@@ -617,31 +632,40 @@ class EditTripFragment : Fragment() {
         editRating = trip.rating.toInt()
         updateStars(editRating)
 
-        if(!!trip.galleryImages.isNullOrEmpty()){
-            updatePhotoViews()
-        }
-
-        loadGalleryImages(trip.galleryImages ?: listOf())
-    }
-
-    private fun loadGalleryImages(strings: List<String>) {
-        val imageViews = listOf(
-            binding.listImage12,
-            binding.listImage22,
-            binding.listImage32,
-            binding.listImage42,
-            binding.listImage52
-        )
-
-        for(i in strings.indices){
-            if(i<imageViews.size){
-                val bitmap = decodeBase64ToBitmap(strings[i])
-                bitmap?.let {
-                    imageViews[i]?.setImageBitmap(bitmap)
-                }
-            }else{break}
+        if (!trip.galleryImages.isNullOrEmpty()) {
+            loadGalleryImages(trip.galleryImages ?: listOf())
         }
 
     }
+
+    private fun loadGalleryImages(images: List<String>) {
+        images.forEachIndexed { index, base64Image ->
+            val decodedBitmap = decodeBase64ToBitmap(base64Image)
+            decodedBitmap?.let {
+                val decodedUri = getImageUriFromBitmap(decodedBitmap)
+                decodedUri?.let { it1 -> galleryImageUris.add(it1) }
+
+                updatePhotoViews()
+            } ?: run {
+                Log.e("LoadGalleryImages", "Failed to decode image at index $index")
+            }
+        }
+    }
+
+
+
+
+    private fun convertUriToBase64(uri: Uri): String? {
+        return try {
+            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
 }

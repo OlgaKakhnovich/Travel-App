@@ -6,6 +6,7 @@ class Model(var documentId: String?=null, var countryName: String?=null, var cit
 }
 
 data class Place(
+    val id: String = "",
     val city: String = "",
     val countryCode: String = "",
     val dateFrom: String = "",

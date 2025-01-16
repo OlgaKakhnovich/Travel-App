@@ -23,6 +23,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.motion.widget.Key.VISIBILITY
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -62,7 +63,7 @@ class AddTripFragment : Fragment() {
     private lateinit var starViews: List<ImageView>
     private var selectedRating = 0
     private lateinit var countryCodePicker: CountryCodePicker
-
+    private lateinit var plusButton: ImageView
     private val maxPhotos = 5
     private lateinit var viewPhotos: LinearLayout
     private lateinit var photoViews: List<ImageView>
@@ -82,7 +83,7 @@ class AddTripFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
+        plusButton = view.findViewById(R.id.plus)
         addHeaderImage = view.findViewById(R.id.add_headerImage)
         addCity = view.findViewById(R.id.add_city)
         addOpinion = view.findViewById(R.id.add_opinion)
@@ -133,9 +134,19 @@ class AddTripFragment : Fragment() {
             }
         }
 
-        addHeaderImage.setOnClickListener {
+
+        plusButton.setOnClickListener {
             showHeaderImageSelectionDialog()
+
         }
+
+
+        addHeaderImage.setOnClickListener {
+            if (headerImageUri != null) {
+                showHeaderImageSelectionDialog()
+            }
+        }
+
 
         buttonAddPhotos.setOnClickListener {
             if (galleryImageUris.size < maxPhotos) {
@@ -201,6 +212,7 @@ class AddTripFragment : Fragment() {
             }
         }
         builder.show()
+        plusButton.visibility = View.GONE
     }
 
     private fun selectHeaderImageFromGallery() {
@@ -362,28 +374,35 @@ class AddTripFragment : Fragment() {
     }
 
     private fun updatePhotoViews() {
-
         photoViews.forEachIndexed { index, imageView ->
+            val deleteButtonId = resources.getIdentifier("deleteButton${index + 1}", "id", requireContext().packageName)
+            val deleteButton = view?.findViewById<ImageButton>(deleteButtonId)
+
             if (index < galleryImageUris.size) {
                 Glide.with(requireContext())
                     .load(galleryImageUris[index])
                     .into(imageView)
                 imageView.visibility = View.VISIBLE
-
+                deleteButton?.visibility = View.GONE
 
                 imageView.setOnClickListener {
-                    galleryImageUris.removeAt(index)
+                    deleteButton?.visibility = View.VISIBLE
+                }
 
+                deleteButton?.setOnClickListener {
+                    galleryImageUris.removeAt(index)
                     updatePhotoViews()
                 }
             } else {
                 imageView.setImageDrawable(null)
                 imageView.visibility = View.GONE
+                deleteButton?.visibility = View.GONE
             }
         }
 
-        buttonAddPhotos.visibility = if (galleryImageUris.size < 5) View.VISIBLE else View.GONE
+        buttonAddPhotos.visibility = if (galleryImageUris.size < maxPhotos) View.VISIBLE else View.GONE
     }
+
 
 
 
