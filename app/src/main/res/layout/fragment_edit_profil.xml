@@ -149,26 +149,12 @@
             android:inputType="textMultiLine"/>
 
 
-
-        <Button
-            android:id="@+id/passw_btn"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:padding="5dp"
-            android:textStyle="italic"
-            android:layout_marginTop="15dp"
-            android:background="@android:color/transparent"
-            android:text="@string/change_password"
-            android:fontFamily="@font/afacad"
-            android:textSize="16sp"
-            android:gravity="center"
-            />
-
         <Button
             android:id="@+id/confirm_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:padding="5dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/purple_dark"
             android:text="@string/save_changes"
             android:fontFamily="@font/afacad"
